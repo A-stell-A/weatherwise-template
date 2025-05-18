@@ -1,1 +1,147 @@
+----------------------------------
+Tool: Gemini
+Date: 2025-05-14
+----------------------------------
+Me: Building on the previous weather script, how can I update the code so that when a user asks for it, instead of just printing the temperature forecast, it generates and displays a graph of the temperature over the next few days?
+AI: Okay, to add the functionality for generating temperature graphs, we'll need to:
+Detect the request for a graph: Modify process_weather_question to identify when the user wants a graph.
+Extract temperature data: Create a function to extract the timestamps and temperatures from the forecast data.
+Generate the graph: Use matplotlib.pyplot to create and display the plot.
 
+My Analysis of the AI Response
+1. The process_weather_question function only checks for keywords like "rain, "temperature", and "forecast" for text-based outputs.
+2. There isn't a function dedicated to extracting the time and temperature information in a format suitable for matplotlib.
+3. The code currently only uses print statements for output.
+
+Me: How can I modify the process_weather_question function to recognise a phrase like "show me a temperature graph" in the user's question? And then, how do I create a new function that takes the weather_data and extracts the timestamps and temperatures so that I can plot them?
+AI: import requests
+import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
+import re
+
+API_KEY = "9e58001aecb184f42bbfe60f3ce9751e"
+
+def get_weather_data(city):
+    url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric"
+    response = requests.get(url)
+    return response.json()
+
+def check_for_rain(data, day="today"):
+    """Checks for a high probability of rain for the specified day."""
+    today = datetime.now().date()
+    if day.lower() == "tomorrow":
+        target_date = today + timedelta(days=1)
+    else:
+        target_date = today
+
+    for entry in data['list']:
+        entry_date = datetime.fromtimestamp(entry['dt']).date()
+        if entry_date == target_date and entry.get('pop', 0) > 0.5:
+            return True
+    return False
+
+def get_city_from_question(question):
+    words = question.split()
+    potential_cities = [word.strip('?,.') for word in words if word[0].isupper()]
+    if potential_cities:
+        return " ".join(potential_cities)
+    match = re.search(r"(?:in|for)\s+([A-Za-z\s,]+)", question)
+    if match:
+        return match.group(1).strip()
+    return None
+
+def extract_temperature_data(weather_data):
+    """Extracts timestamps and temperatures from the forecast data."""
+    timestamps = []
+    temperatures = []
+    for entry in weather_data['list']:
+        dt_txt = datetime.fromtimestamp(entry['dt'])
+        timestamps.append(dt_txt)
+        temperatures.append(entry['main']['temp'])
+    return timestamps, temperatures
+
+def plot_temperature_forecast(timestamps, temperatures, city):
+    """Plots the temperature forecast."""
+    plt.figure(figsize=(10, 6))
+    plt.plot(timestamps, temperatures, marker='o')
+    plt.title(f"Temperature Forecast for {city}")
+    plt.xlabel("Time")
+    plt.ylabel("Temperature (°C)")
+    plt.grid(True)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+def process_weather_question(question):
+    city = get_city_from_question(question)
+    if not city:
+        print("Sorry, I couldn't identify the city in your question.")
+        return
+
+    print(f"\n📍 Getting weather for: {city}")
+    weather_data = get_weather_data(city)
+    if weather_data.get('cod') != '200':
+        print(f"Error: {weather_data.get('message')}")
+        return
+
+    if "temperature graph" in question.lower():
+        timestamps, temperatures = extract_temperature_data(weather_data)
+        plot_temperature_forecast(timestamps, temperatures, city)
+    elif "rain" in question.lower() or "umbrella" in question.lower():
+        day = "today"
+        if "tomorrow" in question.lower():
+            day = "tomorrow"
+        if check_for_rain(weather_data, day):
+            print(f"🌧️ Yes, you should likely bring an umbrella {'today' if day == 'today' else 'tomorrow'}.")
+        else:
+            print(f"☀️ No umbrella needed — it doesn't look like it'll rain {'today' if day == 'today' else 'tomorrow'}.")
+    elif "temperature" in question.lower() or "hot" in question.lower() or "cold" in question.lower():
+        display_weather_for_day(weather_data, city, question) # Modified to handle day context
+    elif "forecast" in question.lower():
+        display_forecast(weather_data)
+    else:
+        display_weather_for_day(weather_data, city, question) # Default to showing conditions for the queried day
+
+def display_weather_for_day(data, city, question):
+    today = datetime.now().date()
+    target_date = today
+    day_str = "today"
+
+    if "tomorrow" in question.lower():
+        target_date = today + timedelta(days=1)
+        day_str = "tomorrow"
+
+    print(f"\n--- Weather for {city} on {day_str.capitalize()} ---")
+    found_data = False
+    for entry in data['list']:
+        entry_date = datetime.fromtimestamp(entry['dt']).date()
+        if entry_date == target_date:
+            timestamp = datetime.fromtimestamp(entry['dt']).strftime('%H:%M')
+            temp = entry['main']['temp']
+            desc = entry['weather'][0]['description']
+            print(f"{timestamp}: {temp}°C, {desc}")
+            found_data = True
+
+    if not found_data:
+        print(f"No specific weather data found for {day_str}.")
+
+def display_forecast(data):
+    print("\n--- 5-day Forecast for {data['city']['name']} ---")
+    for entry in data['list']:
+        time = datetime.fromtimestamp(entry['dt']).strftime('%Y-%m-%d %H:%M')
+        temp = entry['main']['temp']
+        desc = entry['weather'][0]['description']
+        print(f"{time} | {temp}°C | {desc}")
+
+# -------- Main Loop --------
+print("Ask me about the weather! (Type 'exit' to quit)")
+while True:
+    question = input("\n❓ Your question: ")
+    if question.lower() in ("exit", "quit"):
+        print("Goodbye!")
+        break
+    process_weather_question(question)
+
+Explanation of My Prompting Strategy Effectiveness
+1. I indicated that phrases like "show me a temperature graph" should initiate the graph generation
+2. I asked for the modification of process_weather_question for detection and then a new function for data extraction.
