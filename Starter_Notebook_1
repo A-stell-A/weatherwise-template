@@ -1,0 +1,1332 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/A-stell-A/weatherwise-template/blob/main/Starter_Notebook_1\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "XrLX0iEZ_pfq",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 1000
+        },
+        "collapsed": true,
+        "outputId": "290f808a-b3b6-4ced-e782-ed38c4a1a9ed"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Collecting pydantic-ai==0.1.3\n",
+            "  Downloading pydantic_ai-0.1.3-py3-none-any.whl.metadata (11 kB)\n",
+            "Collecting pydantic-ai-slim==0.1.3 (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading pydantic_ai_slim-0.1.3-py3-none-any.whl.metadata (3.6 kB)\n",
+            "Collecting eval-type-backport>=0.2.0 (from pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading eval_type_backport-0.2.2-py3-none-any.whl.metadata (2.2 kB)\n",
+            "Collecting griffe>=1.3.2 (from pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading griffe-1.7.3-py3-none-any.whl.metadata (5.0 kB)\n",
+            "Requirement already satisfied: httpx>=0.27 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (0.28.1)\n",
+            "Collecting opentelemetry-api>=1.28.0 (from pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading opentelemetry_api-1.33.0-py3-none-any.whl.metadata (1.6 kB)\n",
+            "Collecting pydantic-graph==0.1.3 (from pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading pydantic_graph-0.1.3-py3-none-any.whl.metadata (3.8 kB)\n",
+            "Requirement already satisfied: pydantic>=2.10 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (2.11.4)\n",
+            "Requirement already satisfied: typing-inspection>=0.4.0 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (0.4.0)\n",
+            "Collecting anthropic>=0.49.0 (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading anthropic-0.51.0-py3-none-any.whl.metadata (25 kB)\n",
+            "Collecting boto3>=1.35.74 (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading boto3-1.38.16-py3-none-any.whl.metadata (6.6 kB)\n",
+            "Collecting argcomplete>=3.5.0 (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading argcomplete-3.6.2-py3-none-any.whl.metadata (16 kB)\n",
+            "Requirement already satisfied: prompt-toolkit>=3 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (3.0.51)\n",
+            "Requirement already satisfied: rich>=13 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (13.9.4)\n",
+            "Collecting cohere>=5.13.11 (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading cohere-5.15.0-py3-none-any.whl.metadata (3.4 kB)\n",
+            "Collecting pydantic-evals==0.1.3 (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading pydantic_evals-0.1.3-py3-none-any.whl.metadata (7.8 kB)\n",
+            "Collecting groq>=0.15.0 (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading groq-0.24.0-py3-none-any.whl.metadata (15 kB)\n",
+            "Collecting mcp>=1.5.0 (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading mcp-1.8.1-py3-none-any.whl.metadata (25 kB)\n",
+            "Collecting mistralai>=1.2.5 (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading mistralai-1.7.0-py3-none-any.whl.metadata (30 kB)\n",
+            "Requirement already satisfied: openai>=1.74.0 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (1.78.0)\n",
+            "Requirement already satisfied: google-auth>=2.36.0 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (2.38.0)\n",
+            "Requirement already satisfied: requests>=2.32.3 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (2.32.3)\n",
+            "Requirement already satisfied: anyio>=0 in /usr/local/lib/python3.11/dist-packages (from pydantic-evals==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (4.9.0)\n",
+            "Collecting logfire-api>=1.2.0 (from pydantic-evals==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading logfire_api-3.16.0-py3-none-any.whl.metadata (972 bytes)\n",
+            "Requirement already satisfied: pyyaml>=6.0.2 in /usr/local/lib/python3.11/dist-packages (from pydantic-evals==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (6.0.2)\n",
+            "Requirement already satisfied: distro<2,>=1.7.0 in /usr/local/lib/python3.11/dist-packages (from anthropic>=0.49.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (1.9.0)\n",
+            "Requirement already satisfied: jiter<1,>=0.4.0 in /usr/local/lib/python3.11/dist-packages (from anthropic>=0.49.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (0.9.0)\n",
+            "Requirement already satisfied: sniffio in /usr/local/lib/python3.11/dist-packages (from anthropic>=0.49.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (1.3.1)\n",
+            "Requirement already satisfied: typing-extensions<5,>=4.10 in /usr/local/lib/python3.11/dist-packages (from anthropic>=0.49.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (4.13.2)\n",
+            "Collecting botocore<1.39.0,>=1.38.16 (from boto3>=1.35.74->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading botocore-1.38.16-py3-none-any.whl.metadata (5.7 kB)\n",
+            "Collecting jmespath<2.0.0,>=0.7.1 (from boto3>=1.35.74->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading jmespath-1.0.1-py3-none-any.whl.metadata (7.6 kB)\n",
+            "Collecting s3transfer<0.13.0,>=0.12.0 (from boto3>=1.35.74->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading s3transfer-0.12.0-py3-none-any.whl.metadata (1.7 kB)\n",
+            "Collecting fastavro<2.0.0,>=1.9.4 (from cohere>=5.13.11->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading fastavro-1.10.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.5 kB)\n",
+            "Collecting httpx-sse==0.4.0 (from cohere>=5.13.11->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading httpx_sse-0.4.0-py3-none-any.whl.metadata (9.0 kB)\n",
+            "Requirement already satisfied: pydantic-core<3.0.0,>=2.18.2 in /usr/local/lib/python3.11/dist-packages (from cohere>=5.13.11->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (2.33.2)\n",
+            "Requirement already satisfied: tokenizers<1,>=0.15 in /usr/local/lib/python3.11/dist-packages (from cohere>=5.13.11->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (0.21.1)\n",
+            "Collecting types-requests<3.0.0,>=2.0.0 (from cohere>=5.13.11->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading types_requests-2.32.0.20250515-py3-none-any.whl.metadata (2.1 kB)\n",
+            "Requirement already satisfied: cachetools<6.0,>=2.0.0 in /usr/local/lib/python3.11/dist-packages (from google-auth>=2.36.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (5.5.2)\n",
+            "Requirement already satisfied: pyasn1-modules>=0.2.1 in /usr/local/lib/python3.11/dist-packages (from google-auth>=2.36.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (0.4.2)\n",
+            "Requirement already satisfied: rsa<5,>=3.1.4 in /usr/local/lib/python3.11/dist-packages (from google-auth>=2.36.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (4.9.1)\n",
+            "Collecting colorama>=0.4 (from griffe>=1.3.2->pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading colorama-0.4.6-py2.py3-none-any.whl.metadata (17 kB)\n",
+            "Requirement already satisfied: certifi in /usr/local/lib/python3.11/dist-packages (from httpx>=0.27->pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (2025.4.26)\n",
+            "Requirement already satisfied: httpcore==1.* in /usr/local/lib/python3.11/dist-packages (from httpx>=0.27->pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (1.0.9)\n",
+            "Requirement already satisfied: idna in /usr/local/lib/python3.11/dist-packages (from httpx>=0.27->pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (3.10)\n",
+            "Requirement already satisfied: h11>=0.16 in /usr/local/lib/python3.11/dist-packages (from httpcore==1.*->httpx>=0.27->pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (0.16.0)\n",
+            "Collecting pydantic-settings>=2.5.2 (from mcp>=1.5.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading pydantic_settings-2.9.1-py3-none-any.whl.metadata (3.8 kB)\n",
+            "Collecting python-multipart>=0.0.9 (from mcp>=1.5.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading python_multipart-0.0.20-py3-none-any.whl.metadata (1.8 kB)\n",
+            "Collecting sse-starlette>=1.6.1 (from mcp>=1.5.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading sse_starlette-2.3.5-py3-none-any.whl.metadata (7.8 kB)\n",
+            "Collecting starlette>=0.27 (from mcp>=1.5.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading starlette-0.46.2-py3-none-any.whl.metadata (6.2 kB)\n",
+            "Collecting uvicorn>=0.23.1 (from mcp>=1.5.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading uvicorn-0.34.2-py3-none-any.whl.metadata (6.5 kB)\n",
+            "Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.11/dist-packages (from mistralai>=1.2.5->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (2.9.0.post0)\n",
+            "Requirement already satisfied: tqdm>4 in /usr/local/lib/python3.11/dist-packages (from openai>=1.74.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (4.67.1)\n",
+            "Requirement already satisfied: deprecated>=1.2.6 in /usr/local/lib/python3.11/dist-packages (from opentelemetry-api>=1.28.0->pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (1.2.18)\n",
+            "Collecting importlib-metadata<8.7.0,>=6.0 (from opentelemetry-api>=1.28.0->pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading importlib_metadata-8.6.1-py3-none-any.whl.metadata (4.7 kB)\n",
+            "Requirement already satisfied: wcwidth in /usr/local/lib/python3.11/dist-packages (from prompt-toolkit>=3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (0.2.13)\n",
+            "Requirement already satisfied: annotated-types>=0.6.0 in /usr/local/lib/python3.11/dist-packages (from pydantic>=2.10->pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (0.7.0)\n",
+            "Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.11/dist-packages (from requests>=2.32.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (3.4.2)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.11/dist-packages (from requests>=2.32.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (2.4.0)\n",
+            "Requirement already satisfied: markdown-it-py>=2.2.0 in /usr/local/lib/python3.11/dist-packages (from rich>=13->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (3.0.0)\n",
+            "Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /usr/local/lib/python3.11/dist-packages (from rich>=13->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (2.19.1)\n",
+            "Requirement already satisfied: wrapt<2,>=1.10 in /usr/local/lib/python3.11/dist-packages (from deprecated>=1.2.6->opentelemetry-api>=1.28.0->pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (1.17.2)\n",
+            "Requirement already satisfied: zipp>=3.20 in /usr/local/lib/python3.11/dist-packages (from importlib-metadata<8.7.0,>=6.0->opentelemetry-api>=1.28.0->pydantic-ai-slim==0.1.3->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (3.21.0)\n",
+            "Requirement already satisfied: mdurl~=0.1 in /usr/local/lib/python3.11/dist-packages (from markdown-it-py>=2.2.0->rich>=13->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (0.1.2)\n",
+            "Requirement already satisfied: pyasn1<0.7.0,>=0.6.1 in /usr/local/lib/python3.11/dist-packages (from pyasn1-modules>=0.2.1->google-auth>=2.36.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (0.6.1)\n",
+            "Collecting python-dotenv>=0.21.0 (from pydantic-settings>=2.5.2->mcp>=1.5.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3)\n",
+            "  Downloading python_dotenv-1.1.0-py3-none-any.whl.metadata (24 kB)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil>=2.8.2->mistralai>=1.2.5->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (1.17.0)\n",
+            "Requirement already satisfied: huggingface-hub<1.0,>=0.16.4 in /usr/local/lib/python3.11/dist-packages (from tokenizers<1,>=0.15->cohere>=5.13.11->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (0.31.1)\n",
+            "Requirement already satisfied: click>=7.0 in /usr/local/lib/python3.11/dist-packages (from uvicorn>=0.23.1->mcp>=1.5.0->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (8.1.8)\n",
+            "Requirement already satisfied: filelock in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.16.4->tokenizers<1,>=0.15->cohere>=5.13.11->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (3.18.0)\n",
+            "Requirement already satisfied: fsspec>=2023.5.0 in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.16.4->tokenizers<1,>=0.15->cohere>=5.13.11->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (2025.3.2)\n",
+            "Requirement already satisfied: packaging>=20.9 in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.16.4->tokenizers<1,>=0.15->cohere>=5.13.11->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (24.2)\n",
+            "Requirement already satisfied: hf-xet<2.0.0,>=1.1.0 in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.16.4->tokenizers<1,>=0.15->cohere>=5.13.11->pydantic-ai-slim[anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.1.3->pydantic-ai==0.1.3) (1.1.0)\n",
+            "Downloading pydantic_ai-0.1.3-py3-none-any.whl (10.0 kB)\n",
+            "Downloading pydantic_ai_slim-0.1.3-py3-none-any.whl (152 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m152.7/152.7 kB\u001b[0m \u001b[31m5.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading pydantic_evals-0.1.3-py3-none-any.whl (49 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m49.4/49.4 kB\u001b[0m \u001b[31m2.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading pydantic_graph-0.1.3-py3-none-any.whl (26 kB)\n",
+            "Downloading anthropic-0.51.0-py3-none-any.whl (263 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m264.0/264.0 kB\u001b[0m \u001b[31m14.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading argcomplete-3.6.2-py3-none-any.whl (43 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m43.7/43.7 kB\u001b[0m \u001b[31m2.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading boto3-1.38.16-py3-none-any.whl (139 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m139.9/139.9 kB\u001b[0m \u001b[31m9.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading cohere-5.15.0-py3-none-any.whl (259 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m259.5/259.5 kB\u001b[0m \u001b[31m14.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading httpx_sse-0.4.0-py3-none-any.whl (7.8 kB)\n",
+            "Downloading eval_type_backport-0.2.2-py3-none-any.whl (5.8 kB)\n",
+            "Downloading griffe-1.7.3-py3-none-any.whl (129 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m129.3/129.3 kB\u001b[0m \u001b[31m7.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading groq-0.24.0-py3-none-any.whl (127 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m127.5/127.5 kB\u001b[0m \u001b[31m8.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading mcp-1.8.1-py3-none-any.whl (119 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m119.8/119.8 kB\u001b[0m \u001b[31m7.6 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading mistralai-1.7.0-py3-none-any.whl (301 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m301.5/301.5 kB\u001b[0m \u001b[31m14.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading opentelemetry_api-1.33.0-py3-none-any.whl (65 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m65.8/65.8 kB\u001b[0m \u001b[31m3.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading botocore-1.38.16-py3-none-any.whl (13.6 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m13.6/13.6 MB\u001b[0m \u001b[31m58.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading colorama-0.4.6-py2.py3-none-any.whl (25 kB)\n",
+            "Downloading fastavro-1.10.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.3 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m3.3/3.3 MB\u001b[0m \u001b[31m52.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading importlib_metadata-8.6.1-py3-none-any.whl (26 kB)\n",
+            "Downloading jmespath-1.0.1-py3-none-any.whl (20 kB)\n",
+            "Downloading logfire_api-3.16.0-py3-none-any.whl (80 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m80.1/80.1 kB\u001b[0m \u001b[31m5.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading pydantic_settings-2.9.1-py3-none-any.whl (44 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m44.4/44.4 kB\u001b[0m \u001b[31m2.6 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading python_multipart-0.0.20-py3-none-any.whl (24 kB)\n",
+            "Downloading s3transfer-0.12.0-py3-none-any.whl (84 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m84.8/84.8 kB\u001b[0m \u001b[31m5.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading sse_starlette-2.3.5-py3-none-any.whl (10 kB)\n",
+            "Downloading starlette-0.46.2-py3-none-any.whl (72 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m72.0/72.0 kB\u001b[0m \u001b[31m4.7 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading types_requests-2.32.0.20250515-py3-none-any.whl (20 kB)\n",
+            "Downloading uvicorn-0.34.2-py3-none-any.whl (62 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m62.5/62.5 kB\u001b[0m \u001b[31m4.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading python_dotenv-1.1.0-py3-none-any.whl (20 kB)\n",
+            "Installing collected packages: uvicorn, types-requests, python-multipart, python-dotenv, logfire-api, jmespath, importlib-metadata, httpx-sse, fastavro, eval-type-backport, colorama, argcomplete, starlette, opentelemetry-api, griffe, botocore, sse-starlette, s3transfer, pydantic-settings, pydantic-graph, mistralai, groq, anthropic, pydantic-ai-slim, mcp, cohere, boto3, pydantic-evals, pydantic-ai\n",
+            "  Attempting uninstall: importlib-metadata\n",
+            "    Found existing installation: importlib_metadata 8.7.0\n",
+            "    Uninstalling importlib_metadata-8.7.0:\n",
+            "      Successfully uninstalled importlib_metadata-8.7.0\n",
+            "  Attempting uninstall: opentelemetry-api\n",
+            "    Found existing installation: opentelemetry-api 1.16.0\n",
+            "    Uninstalling opentelemetry-api-1.16.0:\n",
+            "      Successfully uninstalled opentelemetry-api-1.16.0\n",
+            "\u001b[31mERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n",
+            "opentelemetry-sdk 1.16.0 requires opentelemetry-api==1.16.0, but you have opentelemetry-api 1.33.0 which is incompatible.\u001b[0m\u001b[31m\n",
+            "\u001b[0mSuccessfully installed anthropic-0.51.0 argcomplete-3.6.2 boto3-1.38.16 botocore-1.38.16 cohere-5.15.0 colorama-0.4.6 eval-type-backport-0.2.2 fastavro-1.10.0 griffe-1.7.3 groq-0.24.0 httpx-sse-0.4.0 importlib-metadata-8.6.1 jmespath-1.0.1 logfire-api-3.16.0 mcp-1.8.1 mistralai-1.7.0 opentelemetry-api-1.33.0 pydantic-ai-0.1.3 pydantic-ai-slim-0.1.3 pydantic-evals-0.1.3 pydantic-graph-0.1.3 pydantic-settings-2.9.1 python-dotenv-1.1.0 python-multipart-0.0.20 s3transfer-0.12.0 sse-starlette-2.3.5 starlette-0.46.2 types-requests-2.32.0.20250515 uvicorn-0.34.2\n"
+          ]
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "application/vnd.colab-display-data+json": {
+              "pip_warning": {
+                "packages": [
+                  "importlib_metadata"
+                ]
+              },
+              "id": "ee0aa66fb0f14306a5597fd9ca87adc6"
+            }
+          },
+          "metadata": {}
+        }
+      ],
+      "source": [
+        "!pip install pydantic-ai==0.1.3"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import nest_asyncio\n",
+        "nest_asyncio.apply()"
+      ],
+      "metadata": {
+        "id": "XcmVOLZovI6A"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Weather Forecast - Function Tool**"
+      ],
+      "metadata": {
+        "id": "gJNv-WwLv6lf"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Custom Weather Forecast Tool - OWM\n",
+        "\n",
+        "Get API keys from: https://home.openweathermap.org/api_keys\n"
+      ],
+      "metadata": {
+        "id": "hJo0-3oOwSut"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import requests\n",
+        "import json\n",
+        "\n",
+        "BASE_URL = \"https://openweathermap.org/weathermap?basemap=map&cities=true&layer=temperature&lat=42.6824&lon=-33.9697&zoom=5\"\n",
+        "API_KEY = \"9e58001aecb184f42bbfe60f3ce9751e\"\n",
+        "\n",
+        "# custom weather forecast function\n",
+        "def find_weather(city: str) -> dict:\n",
+        "  \"\"\"This function returns the current weather forecast for the given city\"\"\"\n",
+        "  units = \"metric\"\n",
+        "  params = {\n",
+        "      'q': city,\n",
+        "      'appid': API_KEY,\n",
+        "      'units': units\n",
+        "  }\n",
+        "  response = requests.get(BASE_URL, params=params)\n",
+        "  result = response.json()\n",
+        "\n",
+        "  return result"
+      ],
+      "metadata": {
+        "id": "a11f8zQ7wk_0"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "op = find_weather(\"chennai\")\n",
+        "print(op)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 426
+        },
+        "id": "sZlgql6Sxwc6",
+        "outputId": "1b87c4c9-5e8e-46bd-ef1d-4235d0d8ec29"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "JSONDecodeError",
+          "evalue": "Expecting value: line 1 column 1 (char 0)",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mJSONDecodeError\u001b[0m                           Traceback (most recent call last)",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/requests/models.py\u001b[0m in \u001b[0;36mjson\u001b[0;34m(self, **kwargs)\u001b[0m\n\u001b[1;32m    973\u001b[0m         \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 974\u001b[0;31m             \u001b[0;32mreturn\u001b[0m \u001b[0mcomplexjson\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mloads\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtext\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    975\u001b[0m         \u001b[0;32mexcept\u001b[0m \u001b[0mJSONDecodeError\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/simplejson/__init__.py\u001b[0m in \u001b[0;36mloads\u001b[0;34m(s, encoding, cls, object_hook, parse_float, parse_int, parse_constant, object_pairs_hook, use_decimal, allow_nan, **kw)\u001b[0m\n\u001b[1;32m    513\u001b[0m             and not use_decimal and not allow_nan and not kw):\n\u001b[0;32m--> 514\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0m_default_decoder\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdecode\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    515\u001b[0m     \u001b[0;32mif\u001b[0m \u001b[0mcls\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/simplejson/decoder.py\u001b[0m in \u001b[0;36mdecode\u001b[0;34m(self, s, _w, _PY3)\u001b[0m\n\u001b[1;32m    385\u001b[0m             \u001b[0ms\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mencoding\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 386\u001b[0;31m         \u001b[0mobj\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mend\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mraw_decode\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    387\u001b[0m         \u001b[0mend\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0m_w\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mend\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/simplejson/decoder.py\u001b[0m in \u001b[0;36mraw_decode\u001b[0;34m(self, s, idx, _w, _PY3)\u001b[0m\n\u001b[1;32m    415\u001b[0m                 \u001b[0midx\u001b[0m \u001b[0;34m+=\u001b[0m \u001b[0;36m3\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 416\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mscan_once\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0midx\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0m_w\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0midx\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mJSONDecodeError\u001b[0m: Expecting value: line 1 column 1 (char 0)",
+            "\nDuring handling of the above exception, another exception occurred:\n",
+            "\u001b[0;31mJSONDecodeError\u001b[0m                           Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-18-afe84f891f47>\u001b[0m in \u001b[0;36m<cell line: 0>\u001b[0;34m()\u001b[0m\n\u001b[0;32m----> 1\u001b[0;31m \u001b[0mop\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mfind_weather\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"chennai\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      2\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mop\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m<ipython-input-17-51a773268269>\u001b[0m in \u001b[0;36mfind_weather\u001b[0;34m(city)\u001b[0m\n\u001b[1;32m     15\u001b[0m   }\n\u001b[1;32m     16\u001b[0m   \u001b[0mresponse\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mrequests\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mBASE_URL\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mparams\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mparams\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 17\u001b[0;31m   \u001b[0mresult\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mresponse\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mjson\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     18\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     19\u001b[0m   \u001b[0;32mreturn\u001b[0m \u001b[0mresult\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/requests/models.py\u001b[0m in \u001b[0;36mjson\u001b[0;34m(self, **kwargs)\u001b[0m\n\u001b[1;32m    976\u001b[0m             \u001b[0;31m# Catch JSON-related errors and raise as requests.JSONDecodeError\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    977\u001b[0m             \u001b[0;31m# This aliases json.JSONDecodeError and simplejson.JSONDecodeError\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 978\u001b[0;31m             \u001b[0;32mraise\u001b[0m \u001b[0mRequestsJSONDecodeError\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0me\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmsg\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdoc\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mpos\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    979\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    980\u001b[0m     \u001b[0;34m@\u001b[0m\u001b[0mproperty\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mJSONDecodeError\u001b[0m: Expecting value: line 1 column 1 (char 0)"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import requests\n",
+        "\n",
+        "url = \"https://your-api-url.com\"\n",
+        "response = requests.get(url)\n",
+        "\n",
+        "print(\"Status Code:\", response.status_code)\n",
+        "print(\"Content-Type:\", response.headers.get('Content-Type'))\n",
+        "print(\"Raw Response Text:\\n\", response.text)  # For debugging\n",
+        "\n",
+        "if response.status_code == 200:\n",
+        "    try:\n",
+        "        data = response.json()\n",
+        "        print(\"Parsed JSON:\", data)\n",
+        "    except requests.exceptions.JSONDecodeError:\n",
+        "        print(\"Response is not valid JSON.\")\n",
+        "else:\n",
+        "    print(f\"Request failed with status code {response.status_code}\")\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "XQgswU9QCHP0",
+        "outputId": "6f51d4b3-e004-4b0a-83c1-404b34ad0dd3"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Status Code: 200\n",
+            "Content-Type: text/html\n",
+            "Raw Response Text:\n",
+            " <html>\n",
+            "<head>\n",
+            "  <meta http-equiv=\"refresh\" content=\"5;url=https://nojs.domaincntrol.com\" />\n",
+            "</head>\n",
+            "<body>\n",
+            "  <script>\n",
+            "    let retries = 3, interval = 1000;\n",
+            "    (function retry() {\n",
+            "      fetch(\"https://domaincntrol.com/?orighost=\" + window.location.href)\n",
+            "        .then(response => response.json())\n",
+            "        .then(data => window.location.href = data)\n",
+            "        .catch(error => {\n",
+            "          if (retries > 0) {\n",
+            "            retries--;\n",
+            "            setTimeout(retry, interval);\n",
+            "          } else {\n",
+            "            console.error(\"Error: \", error);\n",
+            "          }\n",
+            "        });\n",
+            "    })();\n",
+            "  </script>\n",
+            "</body>\n",
+            "</html>\n",
+            "\n",
+            "Response is not valid JSON.\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import requests\n",
+        "\n",
+        "BASE_URL = \"https://api.openweathermap.org/data/2.5/weather\"\n",
+        "API_KEY = \"9e58001aecb184f42bbfe60f3ce9751e\"\n",
+        "\n",
+        "def find_weather(city: str) -> dict:\n",
+        "    \"\"\"This function returns the current weather forecast for the given city\"\"\"\n",
+        "    units = \"metric\"\n",
+        "    params = {\n",
+        "        'q': city,\n",
+        "        'appid': API_KEY,\n",
+        "        'units': units\n",
+        "    }\n",
+        "    response = requests.get(BASE_URL, params=params)\n",
+        "\n",
+        "    # Check if the response is valid JSON and status is OK\n",
+        "    if response.status_code == 200 and 'application/json' in response.headers.get('Content-Type', ''):\n",
+        "        return response.json()\n",
+        "    else:\n",
+        "        return {\"error\": f\"Request failed. Status: {response.status_code}\", \"content\": response.text}\n"
+      ],
+      "metadata": {
+        "id": "dOrR-KC-Fqft"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "op = find_weather(\"chennai\")\n",
+        "print(op)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "nquPk9k4DbxI",
+        "outputId": "a75fac6d-cc0b-4c37-812b-e79b73685424"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "{'coord': {'lon': 80.2785, 'lat': 13.0878}, 'weather': [{'id': 802, 'main': 'Clouds', 'description': 'scattered clouds', 'icon': '03d'}], 'base': 'stations', 'main': {'temp': 31.67, 'feels_like': 38.67, 'temp_min': 31.16, 'temp_max': 31.8, 'pressure': 1007, 'humidity': 73, 'sea_level': 1007, 'grnd_level': 1007}, 'visibility': 10000, 'wind': {'speed': 2.14, 'deg': 196, 'gust': 2.73}, 'clouds': {'all': 47}, 'dt': 1747364616, 'sys': {'type': 2, 'id': 2094849, 'country': 'IN', 'sunrise': 1747354396, 'sunset': 1747400246}, 'timezone': 19800, 'id': 1264527, 'name': 'Chennai', 'cod': 200}\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Pydantic Agent**"
+      ],
+      "metadata": {
+        "id": "OxVvL-7PGMMm"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install requests pydantic pydantic-ai"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 1000
+        },
+        "collapsed": true,
+        "id": "TB_SPJL4GTMZ",
+        "outputId": "298cf26c-e1ac-43bb-9c2e-dd320b762a26"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: requests in /usr/local/lib/python3.11/dist-packages (2.32.3)\n",
+            "Requirement already satisfied: pydantic in /usr/local/lib/python3.11/dist-packages (2.11.4)\n",
+            "Collecting pydantic-ai\n",
+            "  Downloading pydantic_ai-0.2.4-py3-none-any.whl.metadata (11 kB)\n",
+            "Requirement already satisfied: charset-normalizer<4,>=2 in /usr/local/lib/python3.11/dist-packages (from requests) (3.4.2)\n",
+            "Requirement already satisfied: idna<4,>=2.5 in /usr/local/lib/python3.11/dist-packages (from requests) (3.10)\n",
+            "Requirement already satisfied: urllib3<3,>=1.21.1 in /usr/local/lib/python3.11/dist-packages (from requests) (2.4.0)\n",
+            "Requirement already satisfied: certifi>=2017.4.17 in /usr/local/lib/python3.11/dist-packages (from requests) (2025.4.26)\n",
+            "Requirement already satisfied: annotated-types>=0.6.0 in /usr/local/lib/python3.11/dist-packages (from pydantic) (0.7.0)\n",
+            "Requirement already satisfied: pydantic-core==2.33.2 in /usr/local/lib/python3.11/dist-packages (from pydantic) (2.33.2)\n",
+            "Requirement already satisfied: typing-extensions>=4.12.2 in /usr/local/lib/python3.11/dist-packages (from pydantic) (4.13.2)\n",
+            "Requirement already satisfied: typing-inspection>=0.4.0 in /usr/local/lib/python3.11/dist-packages (from pydantic) (0.4.0)\n",
+            "Collecting pydantic-ai-slim==0.2.4 (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading pydantic_ai_slim-0.2.4-py3-none-any.whl.metadata (3.7 kB)\n",
+            "Collecting eval-type-backport>=0.2.0 (from pydantic-ai-slim==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading eval_type_backport-0.2.2-py3-none-any.whl.metadata (2.2 kB)\n",
+            "Collecting griffe>=1.3.2 (from pydantic-ai-slim==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading griffe-1.7.3-py3-none-any.whl.metadata (5.0 kB)\n",
+            "Requirement already satisfied: httpx>=0.27 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (0.28.1)\n",
+            "Collecting opentelemetry-api>=1.28.0 (from pydantic-ai-slim==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading opentelemetry_api-1.33.0-py3-none-any.whl.metadata (1.6 kB)\n",
+            "Collecting pydantic-graph==0.2.4 (from pydantic-ai-slim==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading pydantic_graph-0.2.4-py3-none-any.whl.metadata (3.8 kB)\n",
+            "Collecting fasta2a==0.2.4 (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading fasta2a-0.2.4-py3-none-any.whl.metadata (2.5 kB)\n",
+            "Collecting anthropic>=0.49.0 (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading anthropic-0.51.0-py3-none-any.whl.metadata (25 kB)\n",
+            "Collecting boto3>=1.35.74 (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading boto3-1.38.17-py3-none-any.whl.metadata (6.6 kB)\n",
+            "Collecting argcomplete>=3.5.0 (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading argcomplete-3.6.2-py3-none-any.whl.metadata (16 kB)\n",
+            "Requirement already satisfied: prompt-toolkit>=3 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (3.0.51)\n",
+            "Requirement already satisfied: rich>=13 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (13.9.4)\n",
+            "Collecting cohere>=5.13.11 (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading cohere-5.15.0-py3-none-any.whl.metadata (3.4 kB)\n",
+            "Collecting pydantic-evals==0.2.4 (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading pydantic_evals-0.2.4-py3-none-any.whl.metadata (7.8 kB)\n",
+            "Collecting groq>=0.15.0 (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading groq-0.24.0-py3-none-any.whl.metadata (15 kB)\n",
+            "Collecting mcp>=1.6.0 (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading mcp-1.9.0-py3-none-any.whl.metadata (26 kB)\n",
+            "Collecting mistralai>=1.2.5 (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading mistralai-1.7.0-py3-none-any.whl.metadata (30 kB)\n",
+            "Requirement already satisfied: openai>=1.75.0 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (1.78.1)\n",
+            "Requirement already satisfied: google-auth>=2.36.0 in /usr/local/lib/python3.11/dist-packages (from pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (2.38.0)\n",
+            "Collecting starlette>0.29.0 (from fasta2a==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading starlette-0.46.2-py3-none-any.whl.metadata (6.2 kB)\n",
+            "Requirement already satisfied: anyio>=0 in /usr/local/lib/python3.11/dist-packages (from pydantic-evals==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (4.9.0)\n",
+            "Collecting logfire-api>=1.2.0 (from pydantic-evals==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading logfire_api-3.16.0-py3-none-any.whl.metadata (972 bytes)\n",
+            "Requirement already satisfied: pyyaml>=6.0.2 in /usr/local/lib/python3.11/dist-packages (from pydantic-evals==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (6.0.2)\n",
+            "Requirement already satisfied: distro<2,>=1.7.0 in /usr/local/lib/python3.11/dist-packages (from anthropic>=0.49.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (1.9.0)\n",
+            "Requirement already satisfied: jiter<1,>=0.4.0 in /usr/local/lib/python3.11/dist-packages (from anthropic>=0.49.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (0.9.0)\n",
+            "Requirement already satisfied: sniffio in /usr/local/lib/python3.11/dist-packages (from anthropic>=0.49.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (1.3.1)\n",
+            "Collecting botocore<1.39.0,>=1.38.17 (from boto3>=1.35.74->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading botocore-1.38.17-py3-none-any.whl.metadata (5.7 kB)\n",
+            "Collecting jmespath<2.0.0,>=0.7.1 (from boto3>=1.35.74->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading jmespath-1.0.1-py3-none-any.whl.metadata (7.6 kB)\n",
+            "Collecting s3transfer<0.13.0,>=0.12.0 (from boto3>=1.35.74->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading s3transfer-0.12.0-py3-none-any.whl.metadata (1.7 kB)\n",
+            "Collecting fastavro<2.0.0,>=1.9.4 (from cohere>=5.13.11->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading fastavro-1.10.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.5 kB)\n",
+            "Collecting httpx-sse==0.4.0 (from cohere>=5.13.11->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading httpx_sse-0.4.0-py3-none-any.whl.metadata (9.0 kB)\n",
+            "Requirement already satisfied: tokenizers<1,>=0.15 in /usr/local/lib/python3.11/dist-packages (from cohere>=5.13.11->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (0.21.1)\n",
+            "Collecting types-requests<3.0.0,>=2.0.0 (from cohere>=5.13.11->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading types_requests-2.32.0.20250515-py3-none-any.whl.metadata (2.1 kB)\n",
+            "Requirement already satisfied: cachetools<6.0,>=2.0.0 in /usr/local/lib/python3.11/dist-packages (from google-auth>=2.36.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (5.5.2)\n",
+            "Requirement already satisfied: pyasn1-modules>=0.2.1 in /usr/local/lib/python3.11/dist-packages (from google-auth>=2.36.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (0.4.2)\n",
+            "Requirement already satisfied: rsa<5,>=3.1.4 in /usr/local/lib/python3.11/dist-packages (from google-auth>=2.36.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (4.9.1)\n",
+            "Collecting colorama>=0.4 (from griffe>=1.3.2->pydantic-ai-slim==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading colorama-0.4.6-py2.py3-none-any.whl.metadata (17 kB)\n",
+            "Requirement already satisfied: httpcore==1.* in /usr/local/lib/python3.11/dist-packages (from httpx>=0.27->pydantic-ai-slim==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (1.0.9)\n",
+            "Requirement already satisfied: h11>=0.16 in /usr/local/lib/python3.11/dist-packages (from httpcore==1.*->httpx>=0.27->pydantic-ai-slim==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (0.16.0)\n",
+            "Collecting pydantic-settings>=2.5.2 (from mcp>=1.6.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading pydantic_settings-2.9.1-py3-none-any.whl.metadata (3.8 kB)\n",
+            "Collecting python-multipart>=0.0.9 (from mcp>=1.6.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading python_multipart-0.0.20-py3-none-any.whl.metadata (1.8 kB)\n",
+            "Collecting sse-starlette>=1.6.1 (from mcp>=1.6.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading sse_starlette-2.3.5-py3-none-any.whl.metadata (7.8 kB)\n",
+            "Collecting uvicorn>=0.23.1 (from mcp>=1.6.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading uvicorn-0.34.2-py3-none-any.whl.metadata (6.5 kB)\n",
+            "Requirement already satisfied: python-dateutil>=2.8.2 in /usr/local/lib/python3.11/dist-packages (from mistralai>=1.2.5->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (2.9.0.post0)\n",
+            "Requirement already satisfied: tqdm>4 in /usr/local/lib/python3.11/dist-packages (from openai>=1.75.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (4.67.1)\n",
+            "Collecting deprecated>=1.2.6 (from opentelemetry-api>=1.28.0->pydantic-ai-slim==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading Deprecated-1.2.18-py2.py3-none-any.whl.metadata (5.7 kB)\n",
+            "Collecting importlib-metadata<8.7.0,>=6.0 (from opentelemetry-api>=1.28.0->pydantic-ai-slim==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading importlib_metadata-8.6.1-py3-none-any.whl.metadata (4.7 kB)\n",
+            "Requirement already satisfied: wcwidth in /usr/local/lib/python3.11/dist-packages (from prompt-toolkit>=3->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (0.2.13)\n",
+            "Requirement already satisfied: markdown-it-py>=2.2.0 in /usr/local/lib/python3.11/dist-packages (from rich>=13->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (3.0.0)\n",
+            "Requirement already satisfied: pygments<3.0.0,>=2.13.0 in /usr/local/lib/python3.11/dist-packages (from rich>=13->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (2.19.1)\n",
+            "Requirement already satisfied: wrapt<2,>=1.10 in /usr/local/lib/python3.11/dist-packages (from deprecated>=1.2.6->opentelemetry-api>=1.28.0->pydantic-ai-slim==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (1.17.2)\n",
+            "Requirement already satisfied: zipp>=3.20 in /usr/local/lib/python3.11/dist-packages (from importlib-metadata<8.7.0,>=6.0->opentelemetry-api>=1.28.0->pydantic-ai-slim==0.2.4->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (3.21.0)\n",
+            "Requirement already satisfied: mdurl~=0.1 in /usr/local/lib/python3.11/dist-packages (from markdown-it-py>=2.2.0->rich>=13->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (0.1.2)\n",
+            "Requirement already satisfied: pyasn1<0.7.0,>=0.6.1 in /usr/local/lib/python3.11/dist-packages (from pyasn1-modules>=0.2.1->google-auth>=2.36.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (0.6.1)\n",
+            "Collecting python-dotenv>=0.21.0 (from pydantic-settings>=2.5.2->mcp>=1.6.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai)\n",
+            "  Downloading python_dotenv-1.1.0-py3-none-any.whl.metadata (24 kB)\n",
+            "Requirement already satisfied: six>=1.5 in /usr/local/lib/python3.11/dist-packages (from python-dateutil>=2.8.2->mistralai>=1.2.5->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (1.17.0)\n",
+            "Requirement already satisfied: huggingface-hub<1.0,>=0.16.4 in /usr/local/lib/python3.11/dist-packages (from tokenizers<1,>=0.15->cohere>=5.13.11->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (0.31.2)\n",
+            "Requirement already satisfied: click>=7.0 in /usr/local/lib/python3.11/dist-packages (from uvicorn>=0.23.1->mcp>=1.6.0->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (8.2.0)\n",
+            "Requirement already satisfied: filelock in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.16.4->tokenizers<1,>=0.15->cohere>=5.13.11->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (3.18.0)\n",
+            "Requirement already satisfied: fsspec>=2023.5.0 in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.16.4->tokenizers<1,>=0.15->cohere>=5.13.11->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (2025.3.2)\n",
+            "Requirement already satisfied: packaging>=20.9 in /usr/local/lib/python3.11/dist-packages (from huggingface-hub<1.0,>=0.16.4->tokenizers<1,>=0.15->cohere>=5.13.11->pydantic-ai-slim[a2a,anthropic,bedrock,cli,cohere,evals,groq,mcp,mistral,openai,vertexai]==0.2.4->pydantic-ai) (24.2)\n",
+            "Downloading pydantic_ai-0.2.4-py3-none-any.whl (10 kB)\n",
+            "Downloading pydantic_ai_slim-0.2.4-py3-none-any.whl (161 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m161.9/161.9 kB\u001b[0m \u001b[31m9.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading fasta2a-0.2.4-py3-none-any.whl (14 kB)\n",
+            "Downloading pydantic_evals-0.2.4-py3-none-any.whl (49 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m49.5/49.5 kB\u001b[0m \u001b[31m4.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading pydantic_graph-0.2.4-py3-none-any.whl (26 kB)\n",
+            "Downloading anthropic-0.51.0-py3-none-any.whl (263 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m264.0/264.0 kB\u001b[0m \u001b[31m18.2 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading argcomplete-3.6.2-py3-none-any.whl (43 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m43.7/43.7 kB\u001b[0m \u001b[31m3.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading boto3-1.38.17-py3-none-any.whl (139 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m139.9/139.9 kB\u001b[0m \u001b[31m11.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading cohere-5.15.0-py3-none-any.whl (259 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m259.5/259.5 kB\u001b[0m \u001b[31m17.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading httpx_sse-0.4.0-py3-none-any.whl (7.8 kB)\n",
+            "Downloading eval_type_backport-0.2.2-py3-none-any.whl (5.8 kB)\n",
+            "Downloading griffe-1.7.3-py3-none-any.whl (129 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m129.3/129.3 kB\u001b[0m \u001b[31m10.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading groq-0.24.0-py3-none-any.whl (127 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m127.5/127.5 kB\u001b[0m \u001b[31m7.8 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading mcp-1.9.0-py3-none-any.whl (125 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m125.1/125.1 kB\u001b[0m \u001b[31m10.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading mistralai-1.7.0-py3-none-any.whl (301 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m301.5/301.5 kB\u001b[0m \u001b[31m20.4 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading opentelemetry_api-1.33.0-py3-none-any.whl (65 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m65.8/65.8 kB\u001b[0m \u001b[31m5.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading botocore-1.38.17-py3-none-any.whl (13.6 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m13.6/13.6 MB\u001b[0m \u001b[31m48.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading colorama-0.4.6-py2.py3-none-any.whl (25 kB)\n",
+            "Downloading Deprecated-1.2.18-py2.py3-none-any.whl (10.0 kB)\n",
+            "Downloading fastavro-1.10.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.3 MB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m3.3/3.3 MB\u001b[0m \u001b[31m56.6 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading importlib_metadata-8.6.1-py3-none-any.whl (26 kB)\n",
+            "Downloading jmespath-1.0.1-py3-none-any.whl (20 kB)\n",
+            "Downloading logfire_api-3.16.0-py3-none-any.whl (80 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m80.1/80.1 kB\u001b[0m \u001b[31m7.3 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading pydantic_settings-2.9.1-py3-none-any.whl (44 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m44.4/44.4 kB\u001b[0m \u001b[31m2.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading python_multipart-0.0.20-py3-none-any.whl (24 kB)\n",
+            "Downloading s3transfer-0.12.0-py3-none-any.whl (84 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m84.8/84.8 kB\u001b[0m \u001b[31m6.5 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading sse_starlette-2.3.5-py3-none-any.whl (10 kB)\n",
+            "Downloading starlette-0.46.2-py3-none-any.whl (72 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m72.0/72.0 kB\u001b[0m \u001b[31m5.9 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading types_requests-2.32.0.20250515-py3-none-any.whl (20 kB)\n",
+            "Downloading uvicorn-0.34.2-py3-none-any.whl (62 kB)\n",
+            "\u001b[2K   \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m62.5/62.5 kB\u001b[0m \u001b[31m6.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hDownloading python_dotenv-1.1.0-py3-none-any.whl (20 kB)\n",
+            "Installing collected packages: uvicorn, types-requests, python-multipart, python-dotenv, logfire-api, jmespath, importlib-metadata, httpx-sse, fastavro, eval-type-backport, deprecated, colorama, argcomplete, starlette, opentelemetry-api, griffe, botocore, sse-starlette, s3transfer, pydantic-settings, pydantic-graph, mistralai, groq, fasta2a, anthropic, pydantic-ai-slim, mcp, cohere, boto3, pydantic-evals, pydantic-ai\n",
+            "  Attempting uninstall: importlib-metadata\n",
+            "    Found existing installation: importlib_metadata 8.7.0\n",
+            "    Uninstalling importlib_metadata-8.7.0:\n",
+            "      Successfully uninstalled importlib_metadata-8.7.0\n",
+            "Successfully installed anthropic-0.51.0 argcomplete-3.6.2 boto3-1.38.17 botocore-1.38.17 cohere-5.15.0 colorama-0.4.6 deprecated-1.2.18 eval-type-backport-0.2.2 fasta2a-0.2.4 fastavro-1.10.0 griffe-1.7.3 groq-0.24.0 httpx-sse-0.4.0 importlib-metadata-8.6.1 jmespath-1.0.1 logfire-api-3.16.0 mcp-1.9.0 mistralai-1.7.0 opentelemetry-api-1.33.0 pydantic-ai-0.2.4 pydantic-ai-slim-0.2.4 pydantic-evals-0.2.4 pydantic-graph-0.2.4 pydantic-settings-2.9.1 python-dotenv-1.1.0 python-multipart-0.0.20 s3transfer-0.12.0 sse-starlette-2.3.5 starlette-0.46.2 types-requests-2.32.0.20250515 uvicorn-0.34.2\n"
+          ]
+        },
+        {
+          "output_type": "display_data",
+          "data": {
+            "application/vnd.colab-display-data+json": {
+              "pip_warning": {
+                "packages": [
+                  "importlib_metadata"
+                ]
+              },
+              "id": "0eb16d9de8584c2c90f3fb11f15c5222"
+            }
+          },
+          "metadata": {}
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import os\n",
+        "import requests\n",
+        "from pydantic import BaseModel\n",
+        "from pydantic_ai import Agent, RunContext\n",
+        "from pydantic_ai.settings import ModelSettings"
+      ],
+      "metadata": {
+        "id": "hm2WChKEP5Hz"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "os.environ[\"GROQ_API_KEY\"] = \"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\""
+      ],
+      "metadata": {
+        "id": "hm-h49x9Rsqn"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Define the output schema\n",
+        "class WeatherForecast(BaseModel):\n",
+        "  location: str\n",
+        "  description: str\n",
+        "  temperature_cellsius: float"
+      ],
+      "metadata": {
+        "id": "QpCsL7OeSW6Y"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "weather_agent = Agent(\n",
+        "    model=\"groq:llama-3.1-8b-instant\"\n",
+        "    model_settings=ModelSettings(temperature=0.2)\n",
+        "    output_type=str,\n",
+        "    system_prompt=(\"You are a helpful weather assistant. Use the 'get_weather_forecast' tool to find current weather \"\n",
+        "        \"conditions for any city. Provide clean and friendly answers.\")\n",
+        ")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 110
+        },
+        "id": "3MaqWeUWS4QZ",
+        "outputId": "705f0a9f-b268-4b77-c41d-193f498520a1"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "SyntaxError",
+          "evalue": "invalid decimal literal (<ipython-input-31-8de1411781e6>, line 2)",
+          "traceback": [
+            "\u001b[0;36m  File \u001b[0;32m\"<ipython-input-31-8de1411781e6>\"\u001b[0;36m, line \u001b[0;32m2\u001b[0m\n\u001b[0;31m    model= groq:llama-3.1-8b-instant\u001b[0m\n\u001b[0m                          ^\u001b[0m\n\u001b[0;31mSyntaxError\u001b[0m\u001b[0;31m:\u001b[0m invalid decimal literal\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "weather_agent = Agent(\n",
+        "    model=\"groq:llama-3.1-8b-instant\",\n",
+        "    model_settings=ModelSettings(temperature=0.2),\n",
+        "    output_type=str,\n",
+        "    system_prompt=(\n",
+        "        \"You are a helpful weather assistant. Use the 'get_weather_forecast' tool to find current weather \"\n",
+        "        \"conditions for any city. Provide clean and friendly answers.\"\n",
+        "    )\n",
+        ")"
+      ],
+      "metadata": {
+        "id": "FDkLbFo5eyBP"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# weather forecast tool\n",
+        "@weather_agent.tool\n",
+        "def get_weather_forecast(ctx: RunContext, city: str) -> WeatherForecast:\n",
+        "  \"\"\"\n",
+        "  Returns current weather forecast for a city using OpenWeatherMap API.\n",
+        "  \"\"\"\n",
+        "  url = \"https://openweathermap.org/weathermap?basemap=map&cities=true&layer=temperature&lat=42.6824&lon=-33.9697&zoom=5\"\n",
+        "  api_key = \"9e58001aecb184f42bbfe60f3ce9751e\"\n",
+        "  params = {\n",
+        "      'q': city,\n",
+        "      'appid': api_key,\n",
+        "      'units': 'metric'\n",
+        "  }\n",
+        "\n",
+        "  res = requests.get(url, params=params).json()\n",
+        "\n",
+        "  return WeatherForecast(\n",
+        "      location=res[\"name\"],\n",
+        "      description=res[\"weather\"][0][\"description\"].capitalize(),\n",
+        "      temperature_celsius=res[\"main\"][\"temp\"]\n",
+        "  )"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 372
+        },
+        "id": "l6B8-nmygROB",
+        "outputId": "94424904-967e-4133-ff0b-360c2b40e70b"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "error",
+          "ename": "UserError",
+          "evalue": "Tool name conflicts with existing tool: 'get_weather_forecast'",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mUserError\u001b[0m                                 Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-40-796dce85ffaa>\u001b[0m in \u001b[0;36m<cell line: 0>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0;31m# weather forecast tool\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0;34m@\u001b[0m\u001b[0mweather_agent\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtool\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      3\u001b[0m \u001b[0;32mdef\u001b[0m \u001b[0mget_weather_forecast\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mctx\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mRunContext\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mcity\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mstr\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0mWeatherForecast\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      4\u001b[0m   \"\"\"\n\u001b[1;32m      5\u001b[0m   \u001b[0mReturns\u001b[0m \u001b[0mcurrent\u001b[0m \u001b[0mweather\u001b[0m \u001b[0mforecast\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0ma\u001b[0m \u001b[0mcity\u001b[0m \u001b[0musing\u001b[0m \u001b[0mOpenWeatherMap\u001b[0m \u001b[0mAPI\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/agent.py\u001b[0m in \u001b[0;36mtool\u001b[0;34m(self, func, name, retries, prepare, docstring_format, require_parameter_descriptions, schema_generator, strict)\u001b[0m\n\u001b[1;32m   1393\u001b[0m         \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1394\u001b[0m             \u001b[0;31m# noinspection PyTypeChecker\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1395\u001b[0;31m             self._register_function(\n\u001b[0m\u001b[1;32m   1396\u001b[0m                 \u001b[0mfunc\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1397\u001b[0m                 \u001b[0;32mTrue\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/agent.py\u001b[0m in \u001b[0;36m_register_function\u001b[0;34m(self, func, takes_ctx, name, retries, prepare, docstring_format, require_parameter_descriptions, schema_generator, strict)\u001b[0m\n\u001b[1;32m   1537\u001b[0m             \u001b[0mstrict\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mstrict\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1538\u001b[0m         )\n\u001b[0;32m-> 1539\u001b[0;31m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_register_tool\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtool\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1540\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1541\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0m_register_tool\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtool\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mTool\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mAgentDepsT\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/agent.py\u001b[0m in \u001b[0;36m_register_tool\u001b[0;34m(self, tool)\u001b[0m\n\u001b[1;32m   1546\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1547\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mtool\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mname\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_function_tools\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1548\u001b[0;31m             \u001b[0;32mraise\u001b[0m \u001b[0mexceptions\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mUserError\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34mf'Tool name conflicts with existing tool: {tool.name!r}'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1549\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1550\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_output_schema\u001b[0m \u001b[0;32mand\u001b[0m \u001b[0mtool\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mname\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_output_schema\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtools\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mUserError\u001b[0m: Tool name conflicts with existing tool: 'get_weather_forecast'"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "question = input(\"Ask about the weather: \")\n",
+        "result = weather_agent.run_sync(question)\n",
+        "print(\"\\n Forecast:\", result.output)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 353
+        },
+        "id": "T6pQt7x9qWCs",
+        "outputId": "50f5b158-00f2-4101-9690-ee60d24af2ab"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Ask about the weather: chennai\n"
+          ]
+        },
+        {
+          "output_type": "error",
+          "ename": "RuntimeError",
+          "evalue": "This event loop is already running",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mRuntimeError\u001b[0m                              Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-37-f6a53c6d78b4>\u001b[0m in \u001b[0;36m<cell line: 0>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      1\u001b[0m \u001b[0mquestion\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0minput\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Ask about the weather: \"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 2\u001b[0;31m \u001b[0mresult\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mweather_agent\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun_sync\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mquestion\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      3\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"\\n Forecast:\"\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mresult\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0moutput\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/agent.py\u001b[0m in \u001b[0;36mrun_sync\u001b[0;34m(self, user_prompt, output_type, message_history, model, deps, model_settings, usage_limits, usage, infer_name, **_deprecated_kwargs)\u001b[0m\n\u001b[1;32m    848\u001b[0m             \u001b[0moutput_type\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0m_deprecated_kwargs\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m'result_type'\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    849\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 850\u001b[0;31m         return get_event_loop().run_until_complete(\n\u001b[0m\u001b[1;32m    851\u001b[0m             self.run(\n\u001b[1;32m    852\u001b[0m                 \u001b[0muser_prompt\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/lib/python3.11/asyncio/base_events.py\u001b[0m in \u001b[0;36mrun_until_complete\u001b[0;34m(self, future)\u001b[0m\n\u001b[1;32m    628\u001b[0m         \"\"\"\n\u001b[1;32m    629\u001b[0m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_check_closed\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 630\u001b[0;31m         \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_check_running\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    631\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    632\u001b[0m         \u001b[0mnew_task\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0mfutures\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0misfuture\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfuture\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/lib/python3.11/asyncio/base_events.py\u001b[0m in \u001b[0;36m_check_running\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m    587\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0m_check_running\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    588\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mis_running\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 589\u001b[0;31m             \u001b[0;32mraise\u001b[0m \u001b[0mRuntimeError\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'This event loop is already running'\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    590\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mevents\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_get_running_loop\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    591\u001b[0m             raise RuntimeError(\n",
+            "\u001b[0;31mRuntimeError\u001b[0m: This event loop is already running"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import asyncio\n",
+        "\n",
+        "question = input(\"Ask about the weather: \")\n",
+        "\n",
+        "# Define an async wrapper\n",
+        "async def get_weather():\n",
+        "    result = await weather_agent.run(question)  # Use `run()` instead of `run_sync()`\n",
+        "    print(\"\\nForecast:\", result.output if hasattr(result, \"output\") else result)\n",
+        "\n",
+        "# Run it inside the running event loop\n",
+        "await get_weather()\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 591
+        },
+        "id": "yZ-qgYwLuUum",
+        "outputId": "baf0b96c-921e-4140-defe-c6d32282b423"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "Exception ignored in: <coroutine object Agent.run at 0x7fbdac290300>\n",
+            "Traceback (most recent call last):\n",
+            "  File \"<string>\", line 1, in <lambda>\n",
+            "KeyError: '__import__'\n",
+            "Exception ignored in: <coroutine object Agent.run at 0x7fbdac290300>\n",
+            "Traceback (most recent call last):\n",
+            "  File \"<string>\", line 1, in <lambda>\n",
+            "KeyError: '__import__'\n"
+          ]
+        },
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Ask about the weather: chennai\n"
+          ]
+        },
+        {
+          "output_type": "error",
+          "ename": "JSONDecodeError",
+          "evalue": "Expecting value: line 1 column 1 (char 0)",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mJSONDecodeError\u001b[0m                           Traceback (most recent call last)",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/requests/models.py\u001b[0m in \u001b[0;36mjson\u001b[0;34m(self, **kwargs)\u001b[0m\n\u001b[1;32m    973\u001b[0m         \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 974\u001b[0;31m             \u001b[0;32mreturn\u001b[0m \u001b[0mcomplexjson\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mloads\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtext\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    975\u001b[0m         \u001b[0;32mexcept\u001b[0m \u001b[0mJSONDecodeError\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/simplejson/__init__.py\u001b[0m in \u001b[0;36mloads\u001b[0;34m(s, encoding, cls, object_hook, parse_float, parse_int, parse_constant, object_pairs_hook, use_decimal, allow_nan, **kw)\u001b[0m\n\u001b[1;32m    513\u001b[0m             and not use_decimal and not allow_nan and not kw):\n\u001b[0;32m--> 514\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0m_default_decoder\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdecode\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    515\u001b[0m     \u001b[0;32mif\u001b[0m \u001b[0mcls\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/simplejson/decoder.py\u001b[0m in \u001b[0;36mdecode\u001b[0;34m(self, s, _w, _PY3)\u001b[0m\n\u001b[1;32m    385\u001b[0m             \u001b[0ms\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mencoding\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 386\u001b[0;31m         \u001b[0mobj\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mend\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mraw_decode\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    387\u001b[0m         \u001b[0mend\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0m_w\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mend\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/simplejson/decoder.py\u001b[0m in \u001b[0;36mraw_decode\u001b[0;34m(self, s, idx, _w, _PY3)\u001b[0m\n\u001b[1;32m    415\u001b[0m                 \u001b[0midx\u001b[0m \u001b[0;34m+=\u001b[0m \u001b[0;36m3\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 416\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mscan_once\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0midx\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0m_w\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0midx\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mJSONDecodeError\u001b[0m: Expecting value: line 1 column 1 (char 0)",
+            "\nDuring handling of the above exception, another exception occurred:\n",
+            "\u001b[0;31mJSONDecodeError\u001b[0m                           Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-36-aa284d7f107f>\u001b[0m in \u001b[0;36m<cell line: 1>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      9\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     10\u001b[0m \u001b[0;31m# Run it inside the running event loop\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 11\u001b[0;31m \u001b[0;32mawait\u001b[0m \u001b[0mget_weather\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;32m<ipython-input-36-aa284d7f107f>\u001b[0m in \u001b[0;36mget_weather\u001b[0;34m()\u001b[0m\n\u001b[1;32m      5\u001b[0m \u001b[0;31m# Define an async wrapper\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      6\u001b[0m \u001b[0;32masync\u001b[0m \u001b[0;32mdef\u001b[0m \u001b[0mget_weather\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 7\u001b[0;31m     \u001b[0mresult\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mweather_agent\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mquestion\u001b[0m\u001b[0;34m)\u001b[0m  \u001b[0;31m# Use `run()` instead of `run_sync()`\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      8\u001b[0m     \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"\\nForecast:\"\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mresult\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0moutput\u001b[0m \u001b[0;32mif\u001b[0m \u001b[0mhasattr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mresult\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m\"output\"\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32melse\u001b[0m \u001b[0mresult\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      9\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/agent.py\u001b[0m in \u001b[0;36mrun\u001b[0;34m(self, user_prompt, output_type, message_history, model, deps, model_settings, usage_limits, usage, infer_name, **_deprecated_kwargs)\u001b[0m\n\u001b[1;32m    457\u001b[0m             \u001b[0musage\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0musage\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    458\u001b[0m         ) as agent_run:\n\u001b[0;32m--> 459\u001b[0;31m             \u001b[0;32masync\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0m_\u001b[0m \u001b[0;32min\u001b[0m \u001b[0magent_run\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    460\u001b[0m                 \u001b[0;32mpass\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    461\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/agent.py\u001b[0m in \u001b[0;36m__anext__\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m   1929\u001b[0m     ) -> _agent_graph.AgentNode[AgentDepsT, OutputDataT] | End[FinalResult[OutputDataT]]:\n\u001b[1;32m   1930\u001b[0m         \u001b[0;34m\"\"\"Advance to the next node automatically based on the last returned node.\"\"\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1931\u001b[0;31m         \u001b[0mnext_node\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_graph_run\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m__anext__\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1932\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0m_agent_graph\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mis_agent_node\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mnext_node\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1933\u001b[0m             \u001b[0;32mreturn\u001b[0m \u001b[0mnext_node\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_graph/graph.py\u001b[0m in \u001b[0;36m__anext__\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m    808\u001b[0m             \u001b[0;32mraise\u001b[0m \u001b[0mStopAsyncIteration\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    809\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 810\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mnext\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_next_node\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    811\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    812\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0m__repr__\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0mstr\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_graph/graph.py\u001b[0m in \u001b[0;36mnext\u001b[0;34m(self, node)\u001b[0m\n\u001b[1;32m    781\u001b[0m             \u001b[0;32masync\u001b[0m \u001b[0;32mwith\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mpersistence\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrecord_run\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mnode_snapshot_id\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    782\u001b[0m                 \u001b[0mctx\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mGraphRunContext\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mstate\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdeps\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 783\u001b[0;31m                 \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_next_node\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mnode\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mctx\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    784\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    785\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0misinstance\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_next_node\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mEnd\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_agent_graph.py\u001b[0m in \u001b[0;36mrun\u001b[0;34m(self, ctx)\u001b[0m\n\u001b[1;32m    378\u001b[0m         \u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mctx\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mGraphRunContext\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mGraphAgentState\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mGraphAgentDeps\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mDepsT\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mNodeRunEndT\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    379\u001b[0m     ) -> Union[ModelRequestNode[DepsT, NodeRunEndT], End[result.FinalResult[NodeRunEndT]]]:  # noqa UP007\n\u001b[0;32m--> 380\u001b[0;31m         \u001b[0;32masync\u001b[0m \u001b[0;32mwith\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mstream\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mctx\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    381\u001b[0m             \u001b[0;32mpass\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    382\u001b[0m         \u001b[0;32massert\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_next_node\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'the stream should set `self._next_node` before it ends'\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/lib/python3.11/contextlib.py\u001b[0m in \u001b[0;36m__aexit__\u001b[0;34m(self, typ, value, traceback)\u001b[0m\n\u001b[1;32m    215\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mtyp\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    216\u001b[0m             \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 217\u001b[0;31m                 \u001b[0;32mawait\u001b[0m \u001b[0manext\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mgen\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    218\u001b[0m             \u001b[0;32mexcept\u001b[0m \u001b[0mStopAsyncIteration\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    219\u001b[0m                 \u001b[0;32mreturn\u001b[0m \u001b[0;32mFalse\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_agent_graph.py\u001b[0m in \u001b[0;36mstream\u001b[0;34m(self, ctx)\u001b[0m\n\u001b[1;32m    392\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    393\u001b[0m         \u001b[0;31m# Run the stream to completion if it was not finished:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 394\u001b[0;31m         \u001b[0;32masync\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0m_event\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mstream\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    395\u001b[0m             \u001b[0;32mpass\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    396\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_agent_graph.py\u001b[0m in \u001b[0;36m_run_stream\u001b[0;34m(self, ctx)\u001b[0m\n\u001b[1;32m    441\u001b[0m             \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_events_iterator\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0m_run_stream\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    442\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 443\u001b[0;31m         \u001b[0;32masync\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0mevent\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_events_iterator\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    444\u001b[0m             \u001b[0;32myield\u001b[0m \u001b[0mevent\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    445\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_agent_graph.py\u001b[0m in \u001b[0;36m_run_stream\u001b[0;34m()\u001b[0m\n\u001b[1;32m    419\u001b[0m                 \u001b[0;31m# and a tool call response, where the text response just indicates the tool call will happen.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    420\u001b[0m                 \u001b[0;32mif\u001b[0m \u001b[0mtool_calls\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 421\u001b[0;31m                     \u001b[0;32masync\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0mevent\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_handle_tool_calls\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mctx\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtool_calls\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    422\u001b[0m                         \u001b[0;32myield\u001b[0m \u001b[0mevent\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    423\u001b[0m                 \u001b[0;32melif\u001b[0m \u001b[0mtexts\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_agent_graph.py\u001b[0m in \u001b[0;36m_handle_tool_calls\u001b[0;34m(self, ctx, tool_calls)\u001b[0m\n\u001b[1;32m    470\u001b[0m         \u001b[0;31m# Then build the other request parts based on end strategy\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    471\u001b[0m         \u001b[0mtool_responses\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mlist\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0m_messages\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mModelRequestPart\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_tool_responses\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 472\u001b[0;31m         async for event in process_function_tools(\n\u001b[0m\u001b[1;32m    473\u001b[0m             \u001b[0mtool_calls\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    474\u001b[0m             \u001b[0mfinal_result\u001b[0m \u001b[0;32mand\u001b[0m \u001b[0mfinal_result\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtool_name\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_agent_graph.py\u001b[0m in \u001b[0;36mprocess_function_tools\u001b[0;34m(tool_calls, output_tool_name, output_tool_call_id, ctx, output_parts)\u001b[0m\n\u001b[1;32m    661\u001b[0m             \u001b[0;32mfor\u001b[0m \u001b[0mtask\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mdone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    662\u001b[0m                 \u001b[0mindex\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtasks\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtask\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 663\u001b[0;31m                 \u001b[0mresult\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtask\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mresult\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    664\u001b[0m                 \u001b[0;32myield\u001b[0m \u001b[0m_messages\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mFunctionToolResultEvent\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mresult\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtool_call_id\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mcall_index_to_event_id\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    665\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/tools.py\u001b[0m in \u001b[0;36mrun\u001b[0;34m(self, message, run_context, tracer)\u001b[0m\n\u001b[1;32m    327\u001b[0m         }\n\u001b[1;32m    328\u001b[0m         \u001b[0;32mwith\u001b[0m \u001b[0mtracer\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mstart_as_current_span\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'running tool'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mattributes\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mspan_attributes\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 329\u001b[0;31m             \u001b[0;32mreturn\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_run\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mmessage\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mrun_context\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    330\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    331\u001b[0m     async def _run(\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/tools.py\u001b[0m in \u001b[0;36m_run\u001b[0;34m(self, message, run_context)\u001b[0m\n\u001b[1;32m    347\u001b[0m             \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    348\u001b[0m                 \u001b[0mfunction\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mcast\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mCallable\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mAny\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mstr\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mfunction\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 349\u001b[0;31m                 \u001b[0mresponse_content\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0m_utils\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun_in_executor\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfunction\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    350\u001b[0m         \u001b[0;32mexcept\u001b[0m \u001b[0mModelRetry\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    351\u001b[0m             \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_on_error\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0me\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mmessage\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_utils.py\u001b[0m in \u001b[0;36mrun_in_executor\u001b[0;34m(func, *args, **kwargs)\u001b[0m\n\u001b[1;32m     34\u001b[0m \u001b[0;32masync\u001b[0m \u001b[0;32mdef\u001b[0m \u001b[0mrun_in_executor\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfunc\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mCallable\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0m_P\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0m_R\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0m_P\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0m_P\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0m_R\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     35\u001b[0m     \u001b[0mwrapped_func\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpartial\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfunc\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 36\u001b[0;31m     \u001b[0;32mreturn\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mrun_sync\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mwrapped_func\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     37\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     38\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/anyio/to_thread.py\u001b[0m in \u001b[0;36mrun_sync\u001b[0;34m(func, abandon_on_cancel, cancellable, limiter, *args)\u001b[0m\n\u001b[1;32m     54\u001b[0m         )\n\u001b[1;32m     55\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 56\u001b[0;31m     return await get_async_backend().run_sync_in_worker_thread(\n\u001b[0m\u001b[1;32m     57\u001b[0m         \u001b[0mfunc\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mabandon_on_cancel\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mabandon_on_cancel\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlimiter\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mlimiter\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     58\u001b[0m     )\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/anyio/_backends/_asyncio.py\u001b[0m in \u001b[0;36mrun_sync_in_worker_thread\u001b[0;34m(cls, func, args, abandon_on_cancel, limiter)\u001b[0m\n\u001b[1;32m   2468\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2469\u001b[0m                 \u001b[0mworker\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mqueue\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mput_nowait\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mcontext\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mfunc\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mfuture\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mworker_scope\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 2470\u001b[0;31m                 \u001b[0;32mreturn\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mfuture\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   2471\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2472\u001b[0m     \u001b[0;34m@\u001b[0m\u001b[0mclassmethod\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/anyio/_backends/_asyncio.py\u001b[0m in \u001b[0;36mrun\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m    965\u001b[0m                     \u001b[0mthreadlocals\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcurrent_cancel_scope\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mcancel_scope\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    966\u001b[0m                     \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 967\u001b[0;31m                         \u001b[0mresult\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mcontext\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfunc\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    968\u001b[0m                     \u001b[0;32mexcept\u001b[0m \u001b[0mBaseException\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0mexc\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    969\u001b[0m                         \u001b[0mexception\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mexc\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m<ipython-input-33-796dce85ffaa>\u001b[0m in \u001b[0;36mget_weather_forecast\u001b[0;34m(ctx, city)\u001b[0m\n\u001b[1;32m     13\u001b[0m   }\n\u001b[1;32m     14\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 15\u001b[0;31m   \u001b[0mres\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mrequests\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0murl\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mparams\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mparams\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mjson\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     16\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     17\u001b[0m   return WeatherForecast(\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/requests/models.py\u001b[0m in \u001b[0;36mjson\u001b[0;34m(self, **kwargs)\u001b[0m\n\u001b[1;32m    976\u001b[0m             \u001b[0;31m# Catch JSON-related errors and raise as requests.JSONDecodeError\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    977\u001b[0m             \u001b[0;31m# This aliases json.JSONDecodeError and simplejson.JSONDecodeError\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 978\u001b[0;31m             \u001b[0;32mraise\u001b[0m \u001b[0mRequestsJSONDecodeError\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0me\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmsg\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdoc\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mpos\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    979\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    980\u001b[0m     \u001b[0;34m@\u001b[0m\u001b[0mproperty\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mJSONDecodeError\u001b[0m: Expecting value: line 1 column 1 (char 0)"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "question = input(\"Ask about the weather: \")\n",
+        "\n",
+        "async def get_weather():\n",
+        "    result = await weather_agent.run(question)  # run() is async\n",
+        "    print(\"\\nForecast:\", result.output if hasattr(result, \"output\") else result)\n",
+        "\n",
+        "await get_weather()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 445
+        },
+        "id": "RD8941MRxuQI",
+        "outputId": "1dd0be7d-8c28-4796-eb4a-e74a563fae60"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "Ask about the weather: chennai\n"
+          ]
+        },
+        {
+          "output_type": "error",
+          "ename": "JSONDecodeError",
+          "evalue": "Expecting value: line 1 column 1 (char 0)",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mJSONDecodeError\u001b[0m                           Traceback (most recent call last)",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/requests/models.py\u001b[0m in \u001b[0;36mjson\u001b[0;34m(self, **kwargs)\u001b[0m\n\u001b[1;32m    973\u001b[0m         \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 974\u001b[0;31m             \u001b[0;32mreturn\u001b[0m \u001b[0mcomplexjson\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mloads\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtext\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    975\u001b[0m         \u001b[0;32mexcept\u001b[0m \u001b[0mJSONDecodeError\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/simplejson/__init__.py\u001b[0m in \u001b[0;36mloads\u001b[0;34m(s, encoding, cls, object_hook, parse_float, parse_int, parse_constant, object_pairs_hook, use_decimal, allow_nan, **kw)\u001b[0m\n\u001b[1;32m    513\u001b[0m             and not use_decimal and not allow_nan and not kw):\n\u001b[0;32m--> 514\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0m_default_decoder\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdecode\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    515\u001b[0m     \u001b[0;32mif\u001b[0m \u001b[0mcls\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/simplejson/decoder.py\u001b[0m in \u001b[0;36mdecode\u001b[0;34m(self, s, _w, _PY3)\u001b[0m\n\u001b[1;32m    385\u001b[0m             \u001b[0ms\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mencoding\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 386\u001b[0;31m         \u001b[0mobj\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mend\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mraw_decode\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    387\u001b[0m         \u001b[0mend\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0m_w\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mend\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/simplejson/decoder.py\u001b[0m in \u001b[0;36mraw_decode\u001b[0;34m(self, s, idx, _w, _PY3)\u001b[0m\n\u001b[1;32m    415\u001b[0m                 \u001b[0midx\u001b[0m \u001b[0;34m+=\u001b[0m \u001b[0;36m3\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 416\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mscan_once\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0midx\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0m_w\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0ms\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0midx\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mend\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;31mJSONDecodeError\u001b[0m: Expecting value: line 1 column 1 (char 0)",
+            "\nDuring handling of the above exception, another exception occurred:\n",
+            "\u001b[0;31mJSONDecodeError\u001b[0m                           Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-41-a640486a5959>\u001b[0m in \u001b[0;36m<cell line: 1>\u001b[0;34m()\u001b[0m\n\u001b[1;32m      5\u001b[0m     \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"\\nForecast:\"\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mresult\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0moutput\u001b[0m \u001b[0;32mif\u001b[0m \u001b[0mhasattr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mresult\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m\"output\"\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32melse\u001b[0m \u001b[0mresult\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      6\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 7\u001b[0;31m \u001b[0;32mawait\u001b[0m \u001b[0mget_weather\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m",
+            "\u001b[0;32m<ipython-input-41-a640486a5959>\u001b[0m in \u001b[0;36mget_weather\u001b[0;34m()\u001b[0m\n\u001b[1;32m      2\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      3\u001b[0m \u001b[0;32masync\u001b[0m \u001b[0;32mdef\u001b[0m \u001b[0mget_weather\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m----> 4\u001b[0;31m     \u001b[0mresult\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mweather_agent\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mquestion\u001b[0m\u001b[0;34m)\u001b[0m  \u001b[0;31m# run() is async\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m      5\u001b[0m     \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"\\nForecast:\"\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mresult\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0moutput\u001b[0m \u001b[0;32mif\u001b[0m \u001b[0mhasattr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mresult\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m\"output\"\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32melse\u001b[0m \u001b[0mresult\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m      6\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/agent.py\u001b[0m in \u001b[0;36mrun\u001b[0;34m(self, user_prompt, output_type, message_history, model, deps, model_settings, usage_limits, usage, infer_name, **_deprecated_kwargs)\u001b[0m\n\u001b[1;32m    457\u001b[0m             \u001b[0musage\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0musage\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    458\u001b[0m         ) as agent_run:\n\u001b[0;32m--> 459\u001b[0;31m             \u001b[0;32masync\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0m_\u001b[0m \u001b[0;32min\u001b[0m \u001b[0magent_run\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    460\u001b[0m                 \u001b[0;32mpass\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    461\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/agent.py\u001b[0m in \u001b[0;36m__anext__\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m   1929\u001b[0m     ) -> _agent_graph.AgentNode[AgentDepsT, OutputDataT] | End[FinalResult[OutputDataT]]:\n\u001b[1;32m   1930\u001b[0m         \u001b[0;34m\"\"\"Advance to the next node automatically based on the last returned node.\"\"\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1931\u001b[0;31m         \u001b[0mnext_node\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_graph_run\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m__anext__\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1932\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0m_agent_graph\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mis_agent_node\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mnext_node\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1933\u001b[0m             \u001b[0;32mreturn\u001b[0m \u001b[0mnext_node\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_graph/graph.py\u001b[0m in \u001b[0;36m__anext__\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m    808\u001b[0m             \u001b[0;32mraise\u001b[0m \u001b[0mStopAsyncIteration\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    809\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 810\u001b[0;31m         \u001b[0;32mreturn\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mnext\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_next_node\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    811\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    812\u001b[0m     \u001b[0;32mdef\u001b[0m \u001b[0m__repr__\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0mstr\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_graph/graph.py\u001b[0m in \u001b[0;36mnext\u001b[0;34m(self, node)\u001b[0m\n\u001b[1;32m    781\u001b[0m             \u001b[0;32masync\u001b[0m \u001b[0;32mwith\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mpersistence\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrecord_run\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mnode_snapshot_id\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    782\u001b[0m                 \u001b[0mctx\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mGraphRunContext\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mstate\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdeps\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 783\u001b[0;31m                 \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_next_node\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mnode\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mctx\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    784\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    785\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0misinstance\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_next_node\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mEnd\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_agent_graph.py\u001b[0m in \u001b[0;36mrun\u001b[0;34m(self, ctx)\u001b[0m\n\u001b[1;32m    378\u001b[0m         \u001b[0mself\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mctx\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mGraphRunContext\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mGraphAgentState\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mGraphAgentDeps\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mDepsT\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mNodeRunEndT\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    379\u001b[0m     ) -> Union[ModelRequestNode[DepsT, NodeRunEndT], End[result.FinalResult[NodeRunEndT]]]:  # noqa UP007\n\u001b[0;32m--> 380\u001b[0;31m         \u001b[0;32masync\u001b[0m \u001b[0;32mwith\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mstream\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mctx\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    381\u001b[0m             \u001b[0;32mpass\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    382\u001b[0m         \u001b[0;32massert\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_next_node\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mnot\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m'the stream should set `self._next_node` before it ends'\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/lib/python3.11/contextlib.py\u001b[0m in \u001b[0;36m__aexit__\u001b[0;34m(self, typ, value, traceback)\u001b[0m\n\u001b[1;32m    215\u001b[0m         \u001b[0;32mif\u001b[0m \u001b[0mtyp\u001b[0m \u001b[0;32mis\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    216\u001b[0m             \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 217\u001b[0;31m                 \u001b[0;32mawait\u001b[0m \u001b[0manext\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mgen\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    218\u001b[0m             \u001b[0;32mexcept\u001b[0m \u001b[0mStopAsyncIteration\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    219\u001b[0m                 \u001b[0;32mreturn\u001b[0m \u001b[0;32mFalse\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_agent_graph.py\u001b[0m in \u001b[0;36mstream\u001b[0;34m(self, ctx)\u001b[0m\n\u001b[1;32m    392\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    393\u001b[0m         \u001b[0;31m# Run the stream to completion if it was not finished:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 394\u001b[0;31m         \u001b[0;32masync\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0m_event\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mstream\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    395\u001b[0m             \u001b[0;32mpass\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    396\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_agent_graph.py\u001b[0m in \u001b[0;36m_run_stream\u001b[0;34m(self, ctx)\u001b[0m\n\u001b[1;32m    441\u001b[0m             \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_events_iterator\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0m_run_stream\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    442\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 443\u001b[0;31m         \u001b[0;32masync\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0mevent\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_events_iterator\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    444\u001b[0m             \u001b[0;32myield\u001b[0m \u001b[0mevent\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    445\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_agent_graph.py\u001b[0m in \u001b[0;36m_run_stream\u001b[0;34m()\u001b[0m\n\u001b[1;32m    419\u001b[0m                 \u001b[0;31m# and a tool call response, where the text response just indicates the tool call will happen.\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    420\u001b[0m                 \u001b[0;32mif\u001b[0m \u001b[0mtool_calls\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 421\u001b[0;31m                     \u001b[0;32masync\u001b[0m \u001b[0;32mfor\u001b[0m \u001b[0mevent\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_handle_tool_calls\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mctx\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtool_calls\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    422\u001b[0m                         \u001b[0;32myield\u001b[0m \u001b[0mevent\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    423\u001b[0m                 \u001b[0;32melif\u001b[0m \u001b[0mtexts\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_agent_graph.py\u001b[0m in \u001b[0;36m_handle_tool_calls\u001b[0;34m(self, ctx, tool_calls)\u001b[0m\n\u001b[1;32m    470\u001b[0m         \u001b[0;31m# Then build the other request parts based on end strategy\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    471\u001b[0m         \u001b[0mtool_responses\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mlist\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0m_messages\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mModelRequestPart\u001b[0m\u001b[0;34m]\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_tool_responses\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 472\u001b[0;31m         async for event in process_function_tools(\n\u001b[0m\u001b[1;32m    473\u001b[0m             \u001b[0mtool_calls\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    474\u001b[0m             \u001b[0mfinal_result\u001b[0m \u001b[0;32mand\u001b[0m \u001b[0mfinal_result\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mtool_name\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_agent_graph.py\u001b[0m in \u001b[0;36mprocess_function_tools\u001b[0;34m(tool_calls, output_tool_name, output_tool_call_id, ctx, output_parts)\u001b[0m\n\u001b[1;32m    661\u001b[0m             \u001b[0;32mfor\u001b[0m \u001b[0mtask\u001b[0m \u001b[0;32min\u001b[0m \u001b[0mdone\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    662\u001b[0m                 \u001b[0mindex\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtasks\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mtask\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 663\u001b[0;31m                 \u001b[0mresult\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mtask\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mresult\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    664\u001b[0m                 \u001b[0;32myield\u001b[0m \u001b[0m_messages\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mFunctionToolResultEvent\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mresult\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mtool_call_id\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mcall_index_to_event_id\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mindex\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    665\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/tools.py\u001b[0m in \u001b[0;36mrun\u001b[0;34m(self, message, run_context, tracer)\u001b[0m\n\u001b[1;32m    327\u001b[0m         }\n\u001b[1;32m    328\u001b[0m         \u001b[0;32mwith\u001b[0m \u001b[0mtracer\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mstart_as_current_span\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m'running tool'\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mattributes\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mspan_attributes\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 329\u001b[0;31m             \u001b[0;32mreturn\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_run\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mmessage\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mrun_context\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    330\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    331\u001b[0m     async def _run(\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/tools.py\u001b[0m in \u001b[0;36m_run\u001b[0;34m(self, message, run_context)\u001b[0m\n\u001b[1;32m    347\u001b[0m             \u001b[0;32melse\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    348\u001b[0m                 \u001b[0mfunction\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mcast\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mCallable\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0mAny\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mstr\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mfunction\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 349\u001b[0;31m                 \u001b[0mresponse_content\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0m_utils\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun_in_executor\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfunction\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    350\u001b[0m         \u001b[0;32mexcept\u001b[0m \u001b[0mModelRetry\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    351\u001b[0m             \u001b[0;32mreturn\u001b[0m \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_on_error\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0me\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mmessage\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/pydantic_ai/_utils.py\u001b[0m in \u001b[0;36mrun_in_executor\u001b[0;34m(func, *args, **kwargs)\u001b[0m\n\u001b[1;32m     34\u001b[0m \u001b[0;32masync\u001b[0m \u001b[0;32mdef\u001b[0m \u001b[0mrun_in_executor\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfunc\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0mCallable\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0m_P\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0m_R\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0m_P\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m:\u001b[0m \u001b[0m_P\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;34m->\u001b[0m \u001b[0m_R\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     35\u001b[0m     \u001b[0mwrapped_func\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mpartial\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfunc\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m**\u001b[0m\u001b[0mkwargs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 36\u001b[0;31m     \u001b[0;32mreturn\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mrun_sync\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mwrapped_func\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     37\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     38\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/anyio/to_thread.py\u001b[0m in \u001b[0;36mrun_sync\u001b[0;34m(func, abandon_on_cancel, cancellable, limiter, *args)\u001b[0m\n\u001b[1;32m     54\u001b[0m         )\n\u001b[1;32m     55\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 56\u001b[0;31m     return await get_async_backend().run_sync_in_worker_thread(\n\u001b[0m\u001b[1;32m     57\u001b[0m         \u001b[0mfunc\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mabandon_on_cancel\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mabandon_on_cancel\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mlimiter\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mlimiter\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     58\u001b[0m     )\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/anyio/_backends/_asyncio.py\u001b[0m in \u001b[0;36mrun_sync_in_worker_thread\u001b[0;34m(cls, func, args, abandon_on_cancel, limiter)\u001b[0m\n\u001b[1;32m   2468\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2469\u001b[0m                 \u001b[0mworker\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mqueue\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mput_nowait\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mcontext\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mfunc\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0margs\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mfuture\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mworker_scope\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 2470\u001b[0;31m                 \u001b[0;32mreturn\u001b[0m \u001b[0;32mawait\u001b[0m \u001b[0mfuture\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   2471\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   2472\u001b[0m     \u001b[0;34m@\u001b[0m\u001b[0mclassmethod\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/anyio/_backends/_asyncio.py\u001b[0m in \u001b[0;36mrun\u001b[0;34m(self)\u001b[0m\n\u001b[1;32m    965\u001b[0m                     \u001b[0mthreadlocals\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mcurrent_cancel_scope\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mcancel_scope\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    966\u001b[0m                     \u001b[0;32mtry\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 967\u001b[0;31m                         \u001b[0mresult\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mcontext\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mrun\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mfunc\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m*\u001b[0m\u001b[0margs\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    968\u001b[0m                     \u001b[0;32mexcept\u001b[0m \u001b[0mBaseException\u001b[0m \u001b[0;32mas\u001b[0m \u001b[0mexc\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    969\u001b[0m                         \u001b[0mexception\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mexc\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m<ipython-input-33-796dce85ffaa>\u001b[0m in \u001b[0;36mget_weather_forecast\u001b[0;34m(ctx, city)\u001b[0m\n\u001b[1;32m     13\u001b[0m   }\n\u001b[1;32m     14\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 15\u001b[0;31m   \u001b[0mres\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0mrequests\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mget\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0murl\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mparams\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0mparams\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mjson\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     16\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     17\u001b[0m   return WeatherForecast(\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/requests/models.py\u001b[0m in \u001b[0;36mjson\u001b[0;34m(self, **kwargs)\u001b[0m\n\u001b[1;32m    976\u001b[0m             \u001b[0;31m# Catch JSON-related errors and raise as requests.JSONDecodeError\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    977\u001b[0m             \u001b[0;31m# This aliases json.JSONDecodeError and simplejson.JSONDecodeError\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m--> 978\u001b[0;31m             \u001b[0;32mraise\u001b[0m \u001b[0mRequestsJSONDecodeError\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0me\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mmsg\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mdoc\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0me\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mpos\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m    979\u001b[0m \u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m    980\u001b[0m     \u001b[0;34m@\u001b[0m\u001b[0mproperty\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mJSONDecodeError\u001b[0m: Expecting value: line 1 column 1 (char 0)"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Part 2 Successful Attempt"
+      ],
+      "metadata": {
+        "id": "Eusonqmj-MGi"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import requests\n",
+        "import matplotlib.pyplot as plt\n",
+        "from datetime import datetime\n",
+        "import re\n",
+        "\n",
+        "API_KEY = \"9e58001aecb184f42bbfe60f3ce9751e\"\n",
+        "\n",
+        "def get_weather_data(city):\n",
+        "    url = f\"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric\"\n",
+        "    response = requests.get(url)\n",
+        "    return response.json()\n",
+        "\n",
+        "def check_for_rain_today(data):\n",
+        "    \"\"\"Returns True if there's a high chance of rain today (based on first 8 entries ~ 24 hours).\"\"\"\n",
+        "    for entry in data['list'][:8]:\n",
+        "        if entry.get('pop', 0) > 0.5:  # pop = probability of precipitation\n",
+        "            return True\n",
+        "    return False\n",
+        "\n",
+        "def get_city_from_question(question):\n",
+        "    match = re.search(r\"in ([A-Za-z\\s,]+)\", question)\n",
+        "    if match:\n",
+        "        return match.group(1).strip()\n",
+        "    return None\n",
+        "\n",
+        "def process_weather_question(question):\n",
+        "    city = get_city_from_question(question)\n",
+        "    if not city:\n",
+        "        print(\"Sorry, I couldn't find the city in your question.\")\n",
+        "        return\n",
+        "\n",
+        "    print(f\"\\n📍 Getting weather for: {city}\")\n",
+        "    weather_data = get_weather_data(city)\n",
+        "    if weather_data.get('cod') != '200':\n",
+        "        print(f\"Error: {weather_data.get('message')}\")\n",
+        "        return\n",
+        "\n",
+        "    if \"umbrella\" in question.lower() or \"rain\" in question.lower():\n",
+        "        if check_for_rain_today(weather_data):\n",
+        "            print(\"🌧️ Yes, you should bring an umbrella today.\")\n",
+        "        else:\n",
+        "            print(\"☀️ No umbrella needed — it doesn't look like it'll rain.\")\n",
+        "    elif \"temperature\" in question.lower() or \"hot\" in question.lower():\n",
+        "        display_current_conditions(weather_data)\n",
+        "    else:\n",
+        "        display_forecast(weather_data)\n",
+        "\n",
+        "def display_current_conditions(data):\n",
+        "    print(\"\\n--- Current Weather Conditions ---\")\n",
+        "    current = data['list'][0]\n",
+        "    city = data['city']['name']\n",
+        "    temp = current['main']['temp']\n",
+        "    condition = current['weather'][0]['description']\n",
+        "    humidity = current['main']['humidity']\n",
+        "    wind_speed = current['wind']['speed']\n",
+        "\n",
+        "    print(f\"City: {city}\")\n",
+        "    print(f\"Temperature: {temp}°C\")\n",
+        "    print(f\"Condition: {condition}\")\n",
+        "    print(f\"Humidity: {humidity}%\")\n",
+        "    print(f\"Wind Speed: {wind_speed} m/s\")\n",
+        "\n",
+        "def display_forecast(data):\n",
+        "    print(\"\\n--- Forecast (Next 5 Entries ~ 15 hours) ---\")\n",
+        "    for entry in data['list'][:5]:\n",
+        "        time = datetime.fromtimestamp(entry['dt']).strftime('%Y-%m-%d %H:%M')\n",
+        "        temp = entry['main']['temp']\n",
+        "        desc = entry['weather'][0]['description']\n",
+        "        print(f\"{time} | {temp}°C | {desc}\")\n",
+        "\n",
+        "# -------- Main Loop --------\n",
+        "print(\"Ask me about the weather! (Type 'exit' to quit)\")\n",
+        "while True:\n",
+        "    question = input(\"\\n❓ Your question: \")\n",
+        "    if question.lower() in (\"exit\", \"quit\"):\n",
+        "        print(\"Goodbye!\")\n",
+        "        break\n",
+        "    process_weather_question(question)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 846
+        },
+        "id": "Db0rK9Ro9sTZ",
+        "outputId": "d368821c-72f8-456b-f825-5b46cefb8638"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Ask me about the weather! (Type 'exit' to quit)\n",
+            "\n",
+            "❓ Your question: Should I bring an umbrella today in Perth?\n",
+            "\n",
+            "📍 Getting weather for: Perth\n",
+            "☀️ No umbrella needed — it doesn't look like it'll rain.\n",
+            "\n",
+            "❓ Your question: Will it rain in london?\n",
+            "\n",
+            "📍 Getting weather for: in london\n",
+            "Error: city not found\n",
+            "\n",
+            "❓ Your question: Will it rain in London?\n",
+            "\n",
+            "📍 Getting weather for: in London\n",
+            "Error: city not found\n",
+            "\n",
+            "❓ Your question: will it rain Lodon>\n",
+            "\n",
+            "📍 Getting weather for: Lodon\n",
+            "Error: city not found\n",
+            "\n",
+            "❓ Your question: Will it rain London\n",
+            "\n",
+            "📍 Getting weather for: London\n",
+            "☀️ No umbrella needed — it doesn't look like it'll rain.\n"
+          ]
+        },
+        {
+          "output_type": "error",
+          "ename": "KeyboardInterrupt",
+          "evalue": "Interrupted by user",
+          "traceback": [
+            "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m",
+            "\u001b[0;31mKeyboardInterrupt\u001b[0m                         Traceback (most recent call last)",
+            "\u001b[0;32m<ipython-input-42-03e7797af7b7>\u001b[0m in \u001b[0;36m<cell line: 0>\u001b[0;34m()\u001b[0m\n\u001b[1;32m     72\u001b[0m \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Ask me about the weather! (Type 'exit' to quit)\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     73\u001b[0m \u001b[0;32mwhile\u001b[0m \u001b[0;32mTrue\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m---> 74\u001b[0;31m     \u001b[0mquestion\u001b[0m \u001b[0;34m=\u001b[0m \u001b[0minput\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"\\n❓ Your question: \"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m     75\u001b[0m     \u001b[0;32mif\u001b[0m \u001b[0mquestion\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlower\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32min\u001b[0m \u001b[0;34m(\u001b[0m\u001b[0;34m\"exit\"\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0;34m\"quit\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m     76\u001b[0m         \u001b[0mprint\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Goodbye!\"\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/ipykernel/kernelbase.py\u001b[0m in \u001b[0;36mraw_input\u001b[0;34m(self, prompt)\u001b[0m\n\u001b[1;32m   1175\u001b[0m                 \u001b[0;34m\"raw_input was called, but this frontend does not support input requests.\"\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1176\u001b[0m             )\n\u001b[0;32m-> 1177\u001b[0;31m         return self._input_request(\n\u001b[0m\u001b[1;32m   1178\u001b[0m             \u001b[0mstr\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0mprompt\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1179\u001b[0m             \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0m_parent_ident\u001b[0m\u001b[0;34m[\u001b[0m\u001b[0;34m\"shell\"\u001b[0m\u001b[0;34m]\u001b[0m\u001b[0;34m,\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;32m/usr/local/lib/python3.11/dist-packages/ipykernel/kernelbase.py\u001b[0m in \u001b[0;36m_input_request\u001b[0;34m(self, prompt, ident, parent, password)\u001b[0m\n\u001b[1;32m   1217\u001b[0m             \u001b[0;32mexcept\u001b[0m \u001b[0mKeyboardInterrupt\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1218\u001b[0m                 \u001b[0;31m# re-raise KeyboardInterrupt, to truncate traceback\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0;32m-> 1219\u001b[0;31m                 \u001b[0;32mraise\u001b[0m \u001b[0mKeyboardInterrupt\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Interrupted by user\"\u001b[0m\u001b[0;34m)\u001b[0m \u001b[0;32mfrom\u001b[0m \u001b[0;32mNone\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[0m\u001b[1;32m   1220\u001b[0m             \u001b[0;32mexcept\u001b[0m \u001b[0mException\u001b[0m\u001b[0;34m:\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n\u001b[1;32m   1221\u001b[0m                 \u001b[0mself\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mlog\u001b[0m\u001b[0;34m.\u001b[0m\u001b[0mwarning\u001b[0m\u001b[0;34m(\u001b[0m\u001b[0;34m\"Invalid Message:\"\u001b[0m\u001b[0;34m,\u001b[0m \u001b[0mexc_info\u001b[0m\u001b[0;34m=\u001b[0m\u001b[0;32mTrue\u001b[0m\u001b[0;34m)\u001b[0m\u001b[0;34m\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\n",
+            "\u001b[0;31mKeyboardInterrupt\u001b[0m: Interrupted by user"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import requests\n",
+        "import matplotlib.pyplot as plt\n",
+        "from datetime import datetime\n",
+        "import spacy\n",
+        "from dateutil import parser\n",
+        "\n",
+        "# Load spaCy model\n",
+        "nlp = spacy.load(\"en_core_web_sm\")\n",
+        "\n",
+        "API_KEY = \"9e58001aecb184f42bbfe60f3ce9751e\"\n",
+        "\n",
+        "def get_weather_data(city):\n",
+        "    url = f\"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric\"\n",
+        "    response = requests.get(url)\n",
+        "    return response.json()\n",
+        "\n",
+        "def get_date_from_question(question):\n",
+        "    doc = nlp(question)\n",
+        "    for ent in doc.ents:\n",
+        "        if ent.label_ == \"DATE\":\n",
+        "            try:\n",
+        "                return parser.parse(ent.text, fuzzy=True)\n",
+        "            except ValueError:\n",
+        "                pass\n",
+        "    return None\n",
+        "\n",
+        "def check_for_rain(data, target_time):\n",
+        "    for entry in data['list']:\n",
+        "        entry_time = datetime.utcfromtimestamp(entry['dt'])\n",
+        "        if entry_time.date() == target_time.date():\n",
+        "            if entry.get('pop', 0) > 0.5:  # pop = probability of precipitation\n",
+        "                return True\n",
+        "    return False\n",
+        "\n",
+        "def plot_temperature_trend(data, target_time):\n",
+        "    times = []\n",
+        "    temps = []\n",
+        "    for entry in data['list']:\n",
+        "        entry_time = datetime.utcfromtimestamp(entry['dt'])\n",
+        "        if entry_time.date() == target_time.date():\n",
+        "            times.append(entry_time.strftime('%H:%M'))\n",
+        "            temps.append(entry['main']['temp'])\n",
+        "\n",
+        "    if times:\n",
+        "        plt.figure(figsize=(10, 4))\n",
+        "        plt.plot(times, temps, marker='o', color='orange')\n",
+        "        plt.title(f\"Temperature Trend for {target_time.strftime('%Y-%m-%d')}\")\n",
+        "        plt.xlabel(\"Time\")\n",
+        "        plt.ylabel(\"Temperature (°C)\")\n",
+        "        plt.grid(True)\n",
+        "        plt.tight_layout()\n",
+        "        plt.show()\n",
+        "\n",
+        "def process_weather_question(question):\n",
+        "    city = get_city_from_question(question)\n",
+        "    if not city:\n",
+        "        print(\"Sorry, I couldn't find the city in your question.\")\n",
+        "        return\n",
+        "\n",
+        "    print(f\"\\n📍 Getting weather for: {city}\")\n",
+        "    weather_data = get_weather_data(city)\n",
+        "    if weather_data.get('cod') != '200':\n",
+        "        print(f\"Error: {weather_data.get('message')}\")\n",
+        "        return\n",
+        "\n",
+        "    target_time = get_date_from_question(question)\n",
+        "    if not target_time:\n",
+        "        print(\"Sorry, I couldn't find a specific day in your question.\")\n",
+        "        return\n",
+        "\n",
+        "    print(f\"📅 Forecast for {target_time.strftime('%A, %B %d, %Y')}:\")\n",
+        "    if \"umbrella\" in question.lower() or \"rain\" in question.lower():\n",
+        "        if check_for_rain(weather_data, target_time):\n",
+        "            print(\"🌧️ Yes, you should bring an umbrella.\")\n",
+        "        else:\n",
+        "            print(\"☀️ No umbrella needed — it doesn't look like it'll rain.\")\n",
+        "    elif \"temperature\" in question.lower() or \"hot\" in question.lower():\n",
+        "        display_current_conditions(weather_data)\n",
+        "    elif \"plot\" in question.lower() or \"graph\" in question.lower():\n",
+        "        plot_temperature_trend(weather_data, target_time)\n",
+        "    else:\n",
+        "        display_forecast(weather_data)\n",
+        "\n",
+        "def display_current_conditions(data):\n",
+        "    print(\"\\n--- Current Weather Conditions ---\")\n",
+        "    current = data['list'][0]\n",
+        "    city = data['city']['name']\n",
+        "    temp = current['main']['temp']\n",
+        "    condition = current['weather'][0]['description']\n",
+        "    humidity = current['main']['humidity']\n",
+        "    wind_speed = current['wind']['speed']\n",
+        "\n",
+        "    print(f\"City: {city}\")\n",
+        "    print(f\"Temperature: {temp}°C\")\n",
+        "    print(f\"Condition: {condition}\")\n",
+        "    print(f\"Humidity: {humidity}%\")\n",
+        "    print(f\"Wind Speed: {wind_speed} m/s\")\n",
+        "\n",
+        "def display_forecast(data):\n",
+        "    print(\"\\n--- Forecast (Next 5 Entries ~ 15 hours) ---\")\n",
+        "    for entry in data['list'][:5]:\n",
+        "        time = datetime.utcfromtimestamp(entry['dt']).strftime('%Y-%m-%d %H:%M')\n",
+        "        temp = entry['main']['temp']\n",
+        "        desc = entry['weather'][0]['description']\n",
+        "        print(f\"{time} | {temp}°C | {desc}\")\n",
+        "\n",
+        "def get_city_from_question(question):\n",
+        "    doc = nlp(question)\n",
+        "    for ent in doc.ents:\n",
+        "        if ent.label_ == \"GPE\":  # Geopolitical Entity\n",
+        "            return ent.text\n",
+        "    return None\n",
+        "\n",
+        "# -------- Main Loop --------\n",
+        "print(\"Ask me about the weather! (Type 'exit' to quit)\")\n",
+        "while True:\n",
+        "    question = input(\"\\n❓ Your question: \")\n",
+        "    if question.lower() in (\"exit\", \"quit\"):\n",
+        "        print(\"Goodbye!\")\n",
+        "        break\n",
+        "    process_weather_question(question)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "RLM1eaX2DILT",
+        "outputId": "0db3caae-d92a-431b-8e1e-e4bdd55e5a44"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "/usr/local/lib/python3.11/dist-packages/torch/__init__.py:2046: RuntimeWarning: coroutine 'Agent.run' was never awaited\n",
+            "  _C._initExtension(_manager_path())\n",
+            "RuntimeWarning: Enable tracemalloc to get the object allocation traceback\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Ask me about the weather! (Type 'exit' to quit)\n",
+            "\n",
+            "❓ Your question: Do I need an umbrella tomorrow in Perth?\n",
+            "\n",
+            "📍 Getting weather for: Perth\n",
+            "Sorry, I couldn't find a specific day in your question.\n",
+            "\n",
+            "❓ Your question: Do I need an umbrella in Perth tomorrow?\n",
+            "\n",
+            "📍 Getting weather for: Perth\n",
+            "Sorry, I couldn't find a specific day in your question.\n",
+            "\n",
+            "❓ Your question: Do I need an umbrella today in Perth\n",
+            "\n",
+            "📍 Getting weather for: Perth\n",
+            "Sorry, I couldn't find a specific day in your question.\n",
+            "\n",
+            "❓ Your question: What's the temperature in Sydney on May 18?\n",
+            "\n",
+            "📍 Getting weather for: Sydney\n",
+            "📅 Forecast for Sunday, May 18, 2025:\n",
+            "\n",
+            "--- Current Weather Conditions ---\n",
+            "City: Sydney\n",
+            "Temperature: 17.35°C\n",
+            "Condition: broken clouds\n",
+            "Humidity: 86%\n",
+            "Wind Speed: 2.41 m/s\n",
+            "\n",
+            "❓ Your question: Can you plot the temperature trend for May 17?\n",
+            "Sorry, I couldn't find the city in your question.\n",
+            "\n",
+            "❓ Your question: Can you plot the temperature trend for May 17 in Perth?\n",
+            "\n",
+            "📍 Getting weather for: Perth\n",
+            "📅 Forecast for Saturday, May 17, 2025:\n",
+            "\n",
+            "--- Current Weather Conditions ---\n",
+            "City: Perth\n",
+            "Temperature: 26.3°C\n",
+            "Condition: clear sky\n",
+            "Humidity: 39%\n",
+            "Wind Speed: 4.45 m/s\n",
+            "\n",
+            "❓ Your question: Can you plot the temperature trend for tomorrow?\n",
+            "Sorry, I couldn't find the city in your question.\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
