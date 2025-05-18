@@ -1,1 +1,204 @@
+----------------------------------
+Tool: Gemini
+Date: 2025-05-14
+----------------------------------
+Me: I have this Python script that fetches weather data. However, it struggles to understand questions about 'today' or 'tomorrow', and it's quite rigid in how it expects questions to be phrased. For example, asking 'Will it rain tomorrow in London?' doesn't work well. How can I modify this code to better understand these types of questions and be more flexible with phrasing?
+AI: import requests
+import matplotlib.pyplot as plt
+from datetime import datetime
+import re
 
+API_KEY = "9e58001aecb184f42bbfe60f3ce9751e"
+
+def get_weather_data(city):
+    url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric"
+    response = requests.get(url)
+    return response.json()
+
+def check_for_rain_today(data):
+    """Returns True if there's a high chance of rain today (based on first 8 entries ~ 24 hours)."""
+    for entry in data['list'][:8]:
+        if entry.get('pop', 0) > 0.5:  # pop = probability of precipitation
+            return True
+    return False
+
+def get_city_from_question(question):
+    match = re.search(r"in ([A-Za-z\s,]+)", question)
+    if match:
+        return match.group(1).strip()
+    return None
+
+def process_weather_question(question):
+    city = get_city_from_question(question)
+    if not city:
+        print("Sorry, I couldn't find the city in your question.")
+        return
+
+    print(f"\n📍 Getting weather for: {city}")
+    weather_data = get_weather_data(city)
+    if weather_data.get('cod') != '200':
+        print(f"Error: {weather_data.get('message')}")
+        return
+
+    if "umbrella" in question.lower() or "rain" in question.lower():
+        if check_for_rain_today(weather_data):
+            print("🌧️ Yes, you should bring an umbrella today.")
+        else:
+            print("☀️ No umbrella needed — it doesn't look like it'll rain.")
+    elif "temperature" in question.lower() or "hot" in question.lower():
+        display_current_conditions(weather_data)
+    else:
+        display_forecast(weather_data)
+
+def display_current_conditions(data):
+    print("\n--- Current Weather Conditions ---")
+    current = data['list'][0]
+    city = data['city']['name']
+    temp = current['main']['temp']
+    condition = current['weather'][0]['description']
+    humidity = current['main']['humidity']
+    wind_speed = current['wind']['speed']
+
+    print(f"City: {city}")
+    print(f"Temperature: {temp}°C")
+    print(f"Condition: {condition}")
+    print(f"Humidity: {humidity}%")
+    print(f"Wind Speed: {wind_speed} m/s")
+
+def display_forecast(data):
+    print("\n--- Forecast (Next 5 Entries ~ 15 hours) ---")
+    for entry in data['list'][:5]:
+        time = datetime.fromtimestamp(entry['dt']).strftime('%Y-%m-%d %H:%M')
+        temp = entry['main']['temp']
+        desc = entry['weather'][0]['description']
+        print(f"{time} | {temp}°C | {desc}")
+
+# -------- Main Loop --------
+print("Ask me about the weather! (Type 'exit' to quit)")
+while True:
+    question = input("\n❓ Your question: ")
+    if question.lower() in ("exit", "quit"):
+        print("Goodbye!")
+        break
+    process_weather_question(question)
+You're right, the current implementation has limitations in understanding time references like 'today' and 'tomorrow' and relies heavily on the 'in [city]' structure. To address this, we'll need to:
+
+Enhance city extraction: Make it more robust to different question structures.
+Incorporate time understanding: Determine if the user is asking about 'today' or 'tomorrow' and filter the forecast data accordingly.
+The get_weather_data endpoint you're using provides a 5-day/3-hour forecast. We can leverage the timestamps in this data to determine what constitutes 'today' and 'tomorrow'
+
+My Analysis of the AI Response
+1. The get_city_from_question function only looks for the pattern "in[city]". Questions like "What's the weather in London tomorrow?" won;t be parsed correctly for the city. 
+2. The code doesn't interpret "today" or "tomorrow". The check_for_rain_toda function makes an assumption based on the first 8 entries, but it's not explicitly tied to the user's query about a specific day. 
+3. The process_weather_question function uses simple keyword checks ("umbrella", "rain", "temperature", "hot") which limits its ability to understand more complex or differently phrased questions. 
+
+Me: How can I modify the get_city_from_question function to be more flexible in extracting the city, even if the word "in" isn't present, or if the city is at the beginning of the question? Also, how can I incorporate logic to understand "today" and "tomorrow" and then filter the weather_data to answer questions specifically about those days?
+AI: import requests
+import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
+import re
+
+API_KEY = "9e58001aecb184f42bbfe60f3ce9751e"
+
+def get_weather_data(city):
+    url = f"https://api.openweathermap.org/data/2.5/forecast?q={city}&appid={API_KEY}&units=metric"
+    response = requests.get(url)
+    return response.json()
+
+def check_for_rain(data, day="today"):
+    """Checks for a high probability of rain for the specified day."""
+    today = datetime.now().date()
+    if day.lower() == "tomorrow":
+        target_date = today + timedelta(days=1)
+    else:
+        target_date = today
+
+    for entry in data['list']:
+        entry_date = datetime.fromtimestamp(entry['dt']).date()
+        if entry_date == target_date and entry.get('pop', 0) > 0.5:
+            return True
+    return False
+
+def get_city_from_question(question):
+    # Try to find a capitalized word or phrase that might be the city
+    words = question.split()
+    potential_cities = [word.strip('?,.') for word in words if word[0].isupper()]
+    if potential_cities:
+        # Return the first potential city found (can be improved with more sophisticated NLP)
+        return " ".join(potential_cities)
+    match = re.search(r"(?:in|for)\s+([A-Za-z\s,]+)", question)
+    if match:
+        return match.group(1).strip()
+    return None
+
+def process_weather_question(question):
+    city = get_city_from_question(question)
+    if not city:
+        print("Sorry, I couldn't identify the city in your question.")
+        return
+
+    print(f"\n📍 Getting weather for: {city}")
+    weather_data = get_weather_data(city)
+    if weather_data.get('cod') != '200':
+        print(f"Error: {weather_data.get('message')}")
+        return
+
+    if "rain" in question.lower() or "umbrella" in question.lower():
+        day = "today"
+        if "tomorrow" in question.lower():
+            day = "tomorrow"
+        if check_for_rain(weather_data, day):
+            print(f"🌧️ Yes, you should likely bring an umbrella {'today' if day == 'today' else 'tomorrow'}.")
+        else:
+            print(f"☀️ No umbrella needed — it doesn't look like it'll rain {'today' if day == 'today' else 'tomorrow'}.")
+    elif "temperature" in question.lower() or "hot" in question.lower() or "cold" in question.lower():
+        display_weather_for_day(weather_data, city, question) # Modified to handle day context
+    elif "forecast" in question.lower():
+        display_forecast(weather_data)
+    else:
+        display_weather_for_day(weather_data, city, question) # Default to showing conditions for the queried day
+
+def display_weather_for_day(data, city, question):
+    today = datetime.now().date()
+    target_date = today
+    day_str = "today"
+
+    if "tomorrow" in question.lower():
+        target_date = today + timedelta(days=1)
+        day_str = "tomorrow"
+
+    print(f"\n--- Weather for {city} on {day_str.capitalize()} ---")
+    found_data = False
+    for entry in data['list']:
+        entry_date = datetime.fromtimestamp(entry['dt']).date()
+        if entry_date == target_date:
+            timestamp = datetime.fromtimestamp(entry['dt']).strftime('%H:%M')
+            temp = entry['main']['temp']
+            desc = entry['weather'][0]['description']
+            print(f"{timestamp}: {temp}°C, {desc}")
+            found_data = True
+
+    if not found_data:
+        print(f"No specific weather data found for {day_str}.")
+
+def display_forecast(data):
+    print("\n--- 5-day Forecast for {data['city']['name']} ---")
+    for entry in data['list']:
+        time = datetime.fromtimestamp(entry['dt']).strftime('%Y-%m-%d %H:%M')
+        temp = entry['main']['temp']
+        desc = entry['weather'][0]['description']
+        print(f"{time} | {temp}°C | {desc}")
+
+# -------- Main Loop --------
+print("Ask me about the weather! (Type 'exit' to quit)")
+while True:
+    question = input("\n❓ Your question: ")
+    if question.lower() in ("exit", "quit"):
+        print("Goodbye!")
+        break
+    process_weather_question(question)
+
+Explanation of My Prompting Strategy Effectiveness
+1. I specifically pointed out the limitations in city extraction and the lack of understanding for "today" and "tomorrow".
+2. I asked for modifications to make city extraction more flexible and to incorporate temporal understanding for specific days. 
+3. By mentioning example questions like "Will it rain tomorrow in London?", I illustrated the kind of input the code should handle. 
