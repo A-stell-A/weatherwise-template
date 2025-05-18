@@ -2,3 +2,69 @@
 Tool: ChatGPT
 Date: 2025-05-16
 ----------------------------------
+Me: How can I make a weather app menu in Python with pyinputplus?
+AI: import pyinputplus as pyip
+
+def weather_menu():
+    while True:
+        choice = pyip.inputMenu(['Today', 'Tomorrow', 'Exit'], numbered=True)
+        if choice == 'Today':
+            print("Sunny and 24°C")
+        elif choice == 'Tomorrow':
+            print("Partly cloudy and 21°C")
+        elif choice == 'Exit':
+            break
+
+weather_menu()
+
+My Analyisis of the Initial Code
+1. The weather isn't dynamic or user-personalised
+2. There is no real weather data or simulated flexibility
+3. The function name weather_menu() is fine, but the menu options like "Today" and "Tomorrow" are vague without context. 
+
+Me: Can you rewrite the menu system using pyinputplus for a weather app called "WeatherWise"? I want to include options like checking the current weather, viewing a 3-day forecast, setting a location, and exiting. Please structure it cleanly so I can extend it later, even if the weather data is just placeholder text for now.
+AI: import pyinputplus as pyip
+
+# Simulated user location for the weather app
+user_location = "New York"
+
+def check_current_weather():
+    print(f"\n📍 Current weather in {user_location}:")
+    print("🌤️ It's 22°C and sunny.\n")
+
+def view_forecast():
+    print(f"\n📅 3-Day Forecast for {user_location}:")
+    print("Day 1: ☀️ 24°C")
+    print("Day 2: 🌧️ 19°C")
+    print("Day 3: ⛅ 21°C\n")
+
+def set_location():
+    global user_location
+    user_location = pyip.inputStr(prompt="Enter your city or location: ")
+    print(f"✅ Location set to: {user_location}\n")
+
+def weatherwise_menu():
+    while True:
+        print("==== WeatherWise Main Menu ====")
+        choice = pyip.inputMenu(
+            ['Check Current Weather', 'View Forecast', 'Set Location', 'Exit'],
+            numbered=True
+        )
+        
+        if choice == 'Check Current Weather':
+            check_current_weather()
+        elif choice == 'View Forecast':
+            view_forecast()
+        elif choice == 'Set Location':
+            set_location()
+        elif choice == 'Exit':
+            print("👋 Exiting WeatherWise. Have a nice day!")
+            break
+
+if __name__ == '__main__':
+    weatherwise_menu()
+
+Why My Prompting Strategy Was Effective
+1. Having a clear app name helped guide a branded and structured solution
+2. Requesting specific features resulted in menu options that directly matched my vision
+3. Having relaxed expecations allowed the AI to focus on structure rather than wasting time on API integration
